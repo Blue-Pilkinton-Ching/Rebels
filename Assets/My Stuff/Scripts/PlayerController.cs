@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
     public static PlayerController ClientSingleton;
 
     public PlayerInput PlayerInput;
-    public Transform Focus;
 
     public float MovementSpeed;
     public float ViewFactor;
@@ -20,8 +20,14 @@ public class PlayerController : MonoBehaviour
     Vector2 dir;
     public float angleToMouse { get; private set; }
 
-    private void Awake()
+    public override void OnNetworkSpawn()
     {
+        if (!IsOwner)
+        {
+            Destroy(PlayerInput);
+            return;
+        }
+
         main = Camera.main;
 
         if (ClientSingleton != null)
@@ -33,14 +39,22 @@ public class PlayerController : MonoBehaviour
 
     private void LateUpdate()
     {
-        // Mouse Aiming
+        if (!IsOwner)
+        {
+            return;
+        }
 
         mousePos = main.ScreenToWorldPoint(new Vector3(Mathf.Clamp(Input.mousePosition.x, 0, main.pixelWidth), Mathf.Clamp(Input.mousePosition.y, 0, main.pixelHeight), 0));
-        Focus.position = mousePos - ((mousePos - transform.position) * ViewFactor);
+        GameManager.Singleton.Focus.position = mousePos - ((mousePos - transform.position) * ViewFactor);
     }
 
     private void Update()
     {
+        if (!IsOwner)
+        {
+            return;
+        }
+
         dir = mousePos - transform.position;
         angleToMouse = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 

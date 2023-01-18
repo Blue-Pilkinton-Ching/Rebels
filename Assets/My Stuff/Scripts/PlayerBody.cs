@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 
-public class PlayerBody : MonoBehaviour
+public class PlayerBody : NetworkBehaviour
 {
     public AudioSource shootSFX;
     public AudioClip[] shootClips;
@@ -19,12 +20,25 @@ public class PlayerBody : MonoBehaviour
 
     int fire = Animator.StringToHash("BodyFire");
     int pistel = Animator.StringToHash("BodyPistel");
-    void Awake()
+
+    public override void OnNetworkSpawn()
     {
+        if (!IsOwner)
+        {
+            shootSFX.spatialBlend = GameManager.Singleton.soundBlend;
+            return;
+        }
+
         anm = GetComponent<Animator>();
     }
+
     private void Update()
     {
+        if (!IsOwner)
+        {
+            return;
+        }
+
         bodyState = GetBodyState();
         if (bodyState != oldBodyState)
         {

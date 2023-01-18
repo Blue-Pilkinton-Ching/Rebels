@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerLegs : MonoBehaviour
+public class PlayerLegs : NetworkBehaviour
 {
     public AudioSource footstepAudioSource;
     public AudioClip[] footstepClips;
@@ -23,12 +24,24 @@ public class PlayerLegs : MonoBehaviour
     float targetAngle;
     float lastTargetAngle;
 
-    void Awake()
+    public override void OnNetworkSpawn()
     {
+        if (!IsOwner)
+        {
+            footstepAudioSource.spatialBlend = GameManager.Singleton.soundBlend;
+            return;
+        }
+
         LegsAnim = GetComponent<Animator>();
     }
+
     void Update()
     {
+        if (!IsOwner)
+        {
+            return;
+        }
+
         pantsState = GetPantsState();
 
         if (pantsState != oldPantsState)

@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class NetworkHelper : MonoBehaviour
 {
-    public static NetworkHelper Singleton;
+    public static NetworkHelper Singleton = null;
 
-    private void Awake()
+    private void Start()
     {
         if (Singleton != null)
         {
-            Debug.LogError("sada");
+            Debug.LogError("sadas");
             return;
         }
         Singleton = this;
@@ -19,7 +19,11 @@ public class NetworkHelper : MonoBehaviour
 
     public IEnumerator LobbyHeartBeat(string lobbyID)
     {
-        Lobbies.Instance.SendHeartbeatPingAsync(lobbyID);
-        yield return new WaitForSeconds(15);
+        while (true)
+        {
+            Debug.Log("Sending Lobby Heartbeat");
+            Lobbies.Instance.SendHeartbeatPingAsync(lobbyID);
+            yield return new WaitForSeconds(15);
+        }
     }
 }

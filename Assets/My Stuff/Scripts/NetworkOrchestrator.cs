@@ -9,6 +9,7 @@ using Unity.Services.Lobbies.Models;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class NetworkOrchestrator : MonoBehaviour
@@ -68,8 +69,6 @@ public class NetworkOrchestrator : MonoBehaviour
             throw;
         }
 
-        authID = AuthenticationService.Instance.PlayerId;
-
         explaination.text = "Signed In";
 
         enableAfterCompletion.SetActive(true);
@@ -110,9 +109,6 @@ public class NetworkOrchestrator : MonoBehaviour
         explaination.text = "Retrieved Relay Joincode";
 
         NetworkManager.Singleton.StartClient();
-
-        //NetworkManager.Singleton.SceneManager.LoadScene(mapName.text, UnityEngine.SceneManagement.LoadSceneMode.Single);
-        NetworkManager.Singleton.SceneManager.LoadScene("Town", UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
     public async void OnQuickJoinButton()
     {
@@ -149,9 +145,6 @@ public class NetworkOrchestrator : MonoBehaviour
         explaination.text = "Retrieved Relay Joincode";
 
         NetworkManager.Singleton.StartClient();
-
-        //NetworkManager.Singleton.SceneManager.LoadScene(mapName.text, UnityEngine.SceneManagement.LoadSceneMode.Single);
-        //NetworkManager.Singleton.SceneManager.LoadScene("Town", UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
 
     public async void OnHostButton()
@@ -192,8 +185,6 @@ public class NetworkOrchestrator : MonoBehaviour
         lobbyOptionsData.Add("JoinCode", new DataObject(visibility: DataObject.VisibilityOptions.Public, value: joinCode));
         lobbyOptionsData.Add("Location", new DataObject(visibility: DataObject.VisibilityOptions.Public, value: a.Region));
 
-        Debug.Log(PrivateLobby.isOn);
-
         lobbyOptions.IsPrivate = PrivateLobby.isOn;
         lobbyOptions.Data = lobbyOptionsData;
 
@@ -212,9 +203,10 @@ public class NetworkOrchestrator : MonoBehaviour
 
         NetworkHelper.Singleton.StartCoroutine(NetworkHelper.Singleton.LobbyHeartBeat(lobby.Id));
 
-        NetworkManager.Singleton.StartHost();
+        transport.SetHostRelayData(a.RelayServer.IpV4, (ushort)a.RelayServer.Port, a.AllocationIdBytes, a.Key, a.ConnectionData);
 
-        //NetworkManager.Singleton.SceneManager.LoadScene(mapName.text, UnityEngine.SceneManagement.LoadSceneMode.Single);
-        NetworkManager.Singleton.SceneManager.LoadScene("Town", UnityEngine.SceneManagement.LoadSceneMode.Single);
+        SceneManager.LoadScene("Town");
+
+        NetworkManager.Singleton.StartHost();
     }
 }
