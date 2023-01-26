@@ -39,7 +39,7 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Grass
+  - name: Ground
     uniqueID: 4134608571
     locked: 0
   - name: Tree Shadows
