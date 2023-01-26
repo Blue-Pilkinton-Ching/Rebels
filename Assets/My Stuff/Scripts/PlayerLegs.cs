@@ -1,13 +1,17 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerLegs : NetworkBehaviour
+public class PlayerLegs : NetworkBehaviour, IDamageable
 {
     public AudioSource footstepAudioSource;
     public AudioClip[] footstepClips;
+
+    private Animator anm;
+    private SpriteRenderer sr;
 
     public float rotateSpeed;
 
@@ -19,20 +23,22 @@ public class PlayerLegs : NetworkBehaviour
 
     Vector2 inputMovement;
 
-    Animator LegsAnim;
 
     float targetAngle;
     float lastTargetAngle;
 
     public override void OnNetworkSpawn()
     {
+        sr = GetComponent<SpriteRenderer>();
+        PlayerController.Players[OwnerClientId].OnTakeDamage += OnTakeDamage;
+
         if (!IsOwner)
         {
             footstepAudioSource.spatialBlend = GameManager.Singleton.soundBlend;
             return;
         }
 
-        LegsAnim = GetComponent<Animator>();
+        anm = GetComponent<Animator>();
     }
 
     void Update()
@@ -46,7 +52,7 @@ public class PlayerLegs : NetworkBehaviour
 
         if (pantsState != oldPantsState)
         {
-            LegsAnim.CrossFade(pantsState, 0);
+            anm.CrossFade(pantsState, 0);
             oldPantsState = pantsState;
         }
 
@@ -74,9 +80,22 @@ public class PlayerLegs : NetworkBehaviour
     {
         inputMovement = context.ReadValue<Vector2>();
     }
-
     public void Footstep()
     {
         footstepAudioSource.PlayOneShot(footstepClips[Random.Range(0, footstepClips.Length)]);
+    }
+
+    void OnTakeDamage(float damage, bool dead)
+    {
+        if (!dead)
+        {
+            sr.DOColor(GameManager.Singleton.PlayerDamageColor, GameManager.Singleton.PlayerDamageFlashTime * 0.25f).SetEase(Ease.OutSine).OnComplete(() =>
+                sr.DOColor(Color.white, GameManager.Singleton.PlayerDamageFlashTime * 0.25f).SetEase(Ease.OutSine).SetDelay(GameManager.Singleton.PlayerDamageFlashTime * 0.5f)
+                );
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

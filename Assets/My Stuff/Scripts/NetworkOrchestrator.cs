@@ -23,10 +23,6 @@ public class NetworkOrchestrator : MonoBehaviour
     //public TMP_InputField mapName;
     public bool useRandomID = true;
 
-    InitializationOptions initializationOptions = new();
-    CreateLobbyOptions lobbyOptions = new();
-    string authID;
-
     UnityTransport transport;
 
     private void Start()
@@ -37,6 +33,7 @@ public class NetworkOrchestrator : MonoBehaviour
     public async void OnPlayBtn(GameObject enableAfterCompletion)
     {
         explaination.text = "Authenticating";
+        InitializationOptions initializationOptions = new();
 
         if (useRandomID)
         {
@@ -150,6 +147,8 @@ public class NetworkOrchestrator : MonoBehaviour
     public async void OnHostButton()
     {
         explaination.text = "Creating Relay Allocation";
+        int maxPlayers = int.Parse(MaxPlayers.text);
+
         Allocation a;
 
         try
@@ -184,6 +183,9 @@ public class NetworkOrchestrator : MonoBehaviour
         lobbyOptionsData.Add("Map", new DataObject(visibility: DataObject.VisibilityOptions.Public, value: mapName.text));
         lobbyOptionsData.Add("JoinCode", new DataObject(visibility: DataObject.VisibilityOptions.Public, value: joinCode));
         lobbyOptionsData.Add("Location", new DataObject(visibility: DataObject.VisibilityOptions.Public, value: a.Region));
+
+
+        CreateLobbyOptions lobbyOptions = new();
 
         lobbyOptions.IsPrivate = PrivateLobby.isOn;
         lobbyOptions.Data = lobbyOptionsData;

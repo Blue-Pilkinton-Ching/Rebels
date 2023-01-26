@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -6,46 +6,55 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : NetworkBehaviour
 {
-    public static PlayerController ClientSingleton;
+    public static PlayerController[] Players;
+    
+    public Weapon Weapon;
+    public GameObject PlayerDeath;
+    public AudioSource BulletTakeAudioSource;
 
-    public PlayerInput PlayerInput;
+    private PlayerInput playerInput;
+    private Rigidbody2D rb;
+    private Collider2D collider2d;
 
-    public float MovementSpeed;
-    public float ViewFactor;
+    [SerializeField]
+    private float defaultMovementForce = 2;
+    [SerializeField]
+    private float defaultHealth = 10;
 
-    private Vector2 inputMovement;    
+    public float AngleToMouse { get; private set; }
+    public float Health { get; private set; }
+    public Action OnWeaponChange;
+    public Action<float, bool> OnTakeDamage;
 
+    private Vector2 inputMovement;
     private Camera main;
-    private Vector3 mousePos;
+
+    Vector3 mousePos;
     Vector2 dir;
-    public float angleToMouse { get; private set; }
+    IReadOnlyList<ulong> connectedClients;
+    List<ulong> ids;
 
     public override void OnNetworkSpawn()
     {
+        Players[OwnerClientId] = this;
+        playerInput = GetComponent<PlayerInput>();
+        collider2d = GetComponent<Collider2D>();
+
+        Health = defaultHealth;
+
         if (!IsOwner)
         {
-            Destroy(PlayerInput);
+            Destroy(playerInput);
             return;
         }
 
         main = Camera.main;
-
-        if (ClientSingleton != null)
-        {
-            Debug.LogError("basd");
-        }
-        ClientSingleton = this;
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    private void LateUpdate()
+    private void Start()
     {
-        if (!IsOwner)
-        {
-            return;
-        }
-
-        mousePos = main.ScreenToWorldPoint(new Vector3(Mathf.Clamp(Input.mousePosition.x, 0, main.pixelWidth), Mathf.Clamp(Input.mousePosition.y, 0, main.pixelHeight), 0));
-        GameManager.Singleton.Focus.position = mousePos - ((mousePos - transform.position) * ViewFactor);
+        OnWeaponChange.Invoke();
     }
 
     private void Update()
@@ -56,13 +65,73 @@ public class PlayerController : NetworkBehaviour
         }
 
         dir = mousePos - transform.position;
-        angleToMouse = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        AngleToMouse = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-        transform.position += new Vector3(inputMovement.x, inputMovement.y) * MovementSpeed * Time.deltaTime;
+        mousePos = main.ScreenToWorldPoint(new Vector3(Mathf.Clamp(Input.mousePosition.x, 0, main.pixelWidth), Mathf.Clamp(Input.mousePosition.y, 0, main.pixelHeight), 0));
+        GameManager.Singleton.Focus.position = mousePos - ((mousePos - transform.position) * Weapon.ViewFactor);
+    }
+
+    private void FixedUpdate()
+    {
+        if (!IsOwner)
+        {
+            return;
+        }
+
+        rb.AddForce(new Vector2(inputMovement.x, inputMovement.y) * defaultMovementForce * Weapon.MoveForce, ForceMode2D.Force);
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
         inputMovement = context.ReadValue<Vector2>();
+    }
+
+    private void Die()
+    {
+        collider2d.enabled = false;
+        Instantiate(PlayerDeath, transform);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        TakeDamageResponse(damage);
+        TakeDamageServerRPC(damage);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void TakeDamageServerRPC(float damage, ServerRpcParams serverRpcParams = default)
+    {
+        connectedClients = NetworkManager.ConnectedClientsIds;
+        ids = new List<ulong>();
+
+        for (int i = 0; i < connectedClients.Count; i++)
+        {
+            if (connectedClients[i] != serverRpcParams.Receive.SenderClientId)
+            {
+                ids.Add(connectedClients[i]);
+            }
+        }
+        TakeDamageClientRPC(damage, new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = ids } });
+    }
+
+    [ClientRpc]
+    private void TakeDamageClientRPC(float damage, ClientRpcParams clientRpcParams)
+    {
+        TakeDamageResponse(damage);
+    }
+
+    private void TakeDamageResponse(float damage)
+    {
+        Health -= damage;
+        OnTakeDamage.Invoke(damage, Health <= 0);
+
+        if (IsOwner)
+        {
+            AudioManager.PlayVariedAudio(BulletTakeAudioSource, Weapon.weaponTakeClips);
+        }
+        if (Health <= 0)
+        {
+            Die();
+        }
     }
 }

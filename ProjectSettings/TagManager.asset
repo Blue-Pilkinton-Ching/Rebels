@@ -39,20 +39,26 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Default
-    uniqueID: 0
-    locked: 0
   - name: Grass
     uniqueID: 4134608571
     locked: 0
   - name: Tree Shadows
     uniqueID: 2400622337
     locked: 0
+  - name: Dead Body
+    uniqueID: 898150497
+    locked: 0
   - name: Player Legs
     uniqueID: 2649748033
     locked: 0
   - name: Player Body
     uniqueID: 380918917
+    locked: 0
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Bullets
+    uniqueID: 438458653
     locked: 0
   - name: Trees
     uniqueID: 3652454079

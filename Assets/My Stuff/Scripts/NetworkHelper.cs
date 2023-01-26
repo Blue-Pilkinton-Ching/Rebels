@@ -6,8 +6,7 @@ using UnityEngine;
 public class NetworkHelper : MonoBehaviour
 {
     public static NetworkHelper Singleton = null;
-
-    private void Start()
+    private void Awake()
     {
         if (Singleton != null)
         {
