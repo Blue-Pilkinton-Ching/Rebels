@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 1172482675179644729}
   - component: {fileID: 5972626808156376768}
   - component: {fileID: -6725683353459528926}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -517,7 +517,7 @@ MonoBehaviour:
   ShootPosition: {fileID: 1234475584321388355}
   BulletLayerMask:
     serializedVersion: 2
-    m_Bits: 2147483647
+    m_Bits: 115
 --- !u!114 &6823767326161434609
 MonoBehaviour:
   m_ObjectHideFlags: 0
