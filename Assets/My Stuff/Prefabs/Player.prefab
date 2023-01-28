@@ -212,8 +212,10 @@ MonoBehaviour:
   Weapon: {fileID: 11400000, guid: 65e9218d4b853e64abcd37016e66b63a, type: 2}
   PlayerDeath: {fileID: 7486358693312954606, guid: 977291e7aad8ec5479424ccbf2b76089, type: 3}
   BulletTakeAudioSource: {fileID: -6725683353459528926}
-  defaultMovementForce: 5000
+  defaultMovementForce: 4000
   defaultHealth: 20
+  PlayerDamageColor: {r: 0.5377358, g: 0.12210763, b: 0.03804734, a: 1}
+  PlayerDamageFlashTime: 0.2
 --- !u!114 &95103174382075761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -286,7 +288,7 @@ CircleCollider2D:
   m_GameObject: {fileID: 4325786074038893643}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 94d8823c15e1f5d408e6767118b2c823, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -467,7 +469,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 380918917
-  m_SortingLayer: -1
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: a44e9b6f6218b4b4fbf09d5dfb65efd5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -517,7 +519,10 @@ MonoBehaviour:
   ShootPosition: {fileID: 1234475584321388355}
   BulletLayerMask:
     serializedVersion: 2
-    m_Bits: 115
+    m_Bits: 979
+  BulletChanceLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &6823767326161434609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -826,7 +831,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1645219263
-  m_SortingLayer: -2
+  m_SortingLayer: -5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 1f48e05f02504e243b55b0fd23b3043c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

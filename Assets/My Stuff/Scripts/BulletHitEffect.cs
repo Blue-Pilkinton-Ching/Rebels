@@ -6,6 +6,6 @@ public class BulletHitEffect : MonoBehaviour
 {
     public void Start()
     {
-        Destroy(gameObject, GameManager.Singleton.bulletHitEffectLifetime);
+        Destroy(gameObject, BulletManager.Singleton.bulletHitEffectLifetime);
     }
 }

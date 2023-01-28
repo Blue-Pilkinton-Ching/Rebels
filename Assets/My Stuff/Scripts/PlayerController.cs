@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -7,7 +8,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : NetworkBehaviour
 {
     public static PlayerController[] Players;
-    
+
     public Weapon Weapon;
     public GameObject PlayerDeath;
     public AudioSource BulletTakeAudioSource;
@@ -20,6 +21,8 @@ public class PlayerController : NetworkBehaviour
     private float defaultMovementForce = 2;
     [SerializeField]
     private float defaultHealth = 10;
+    [SerializeField]
+    private float camOrthogrphicChangeSpeed = 1;
 
     public float AngleToMouse { get; private set; }
     public float Health { get; private set; }
@@ -28,6 +31,9 @@ public class PlayerController : NetworkBehaviour
 
     private Vector2 inputMovement;
     private Camera main;
+
+    public Color PlayerDamageColor;
+    public float PlayerDamageFlashTime;
 
     Vector3 mousePos;
     Vector2 dir;
@@ -39,6 +45,7 @@ public class PlayerController : NetworkBehaviour
         Players[OwnerClientId] = this;
         playerInput = GetComponent<PlayerInput>();
         collider2d = GetComponent<Collider2D>();
+        OnWeaponChange += OnThisWeaponChange;
 
         Health = defaultHealth;
 
@@ -55,6 +62,13 @@ public class PlayerController : NetworkBehaviour
     private void Start()
     {
         OnWeaponChange.Invoke();
+    }
+
+    private void OnThisWeaponChange()
+    {
+        DOTween.To(() => GameManager.Singleton.Camera.m_Lens.OrthographicSize, 
+            x => GameManager.Singleton.Camera.m_Lens.OrthographicSize = x, 
+            Weapon.CameraOrthographicSize, camOrthogrphicChangeSpeed).SetEase(Ease.OutSine);
     }
 
     private void Update()
@@ -78,7 +92,10 @@ public class PlayerController : NetworkBehaviour
             return;
         }
 
-        rb.AddForce(new Vector2(inputMovement.x, inputMovement.y) * defaultMovementForce * Weapon.MoveForce, ForceMode2D.Force);
+        if (Health > 0)
+        {
+            rb.AddForce(new Vector2(inputMovement.x, inputMovement.y) * defaultMovementForce * Weapon.MoveForce, ForceMode2D.Force);
+        }
     }
 
     public void OnMove(InputAction.CallbackContext context)

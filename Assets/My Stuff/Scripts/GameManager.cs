@@ -4,6 +4,7 @@ using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Services.Relay;
 using UnityEngine;
+using Cinemachine;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,19 +12,12 @@ public class GameManager : MonoBehaviour
     public GameObject playerPrefab;
     [Range(0, 1)]
     public float soundBlend = 0.8f;
-    public float BulletMaxTravelDistance = 500;
 
     public Transform Focus;
+    public CinemachineVirtualCamera Camera;
 
     public AudioClip[] soundtracks;
     public AudioSource soundTrackSource;
-
-    public GameObject[] bulletHitEffects;
-    public float bulletHitEffectLifetime = 0.1f;
-
-    public Color PlayerDamageColor;
-    public float PlayerDamageFlashTime;
-
 
     public int maxPlayers = 100;
     void Awake()

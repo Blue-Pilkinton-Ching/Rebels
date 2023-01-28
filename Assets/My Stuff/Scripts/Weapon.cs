@@ -7,6 +7,7 @@ public class Weapon : ScriptableObject
 {
     [Range(0.5f, 1)]
     public float ViewFactor = 0.8f;
+    public float CameraOrthographicSize = 3;
     public WeaponType WeaponType = WeaponType.Pistel;
     public float MoveForce = 1;
     public float BulletSpeed = 35;
@@ -18,6 +19,8 @@ public class Weapon : ScriptableObject
     [Range(0, 180)]
     public float weaponInacurracy = 5f;
     public float damageAmount = 3f;
+
+    public AnimationCurve bulletChanceCollide;
 }
 
 [System.Serializable]

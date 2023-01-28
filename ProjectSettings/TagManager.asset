@@ -13,9 +13,9 @@ TagManager:
   - Water
   - UI
   - Player
-  - 
-  - 
-  - 
+  - Static Short Objects
+  - Bullet Chance Collider
+  - Bullet Collider
   - 
   - 
   - 
@@ -42,8 +42,8 @@ TagManager:
   - name: Ground
     uniqueID: 4134608571
     locked: 0
-  - name: Tree Shadows
-    uniqueID: 2400622337
+  - name: Ground Shadows
+    uniqueID: 2947947985
     locked: 0
   - name: Dead Body
     uniqueID: 898150497
@@ -51,8 +51,17 @@ TagManager:
   - name: Player Legs
     uniqueID: 2649748033
     locked: 0
+  - name: Short Shadows
+    uniqueID: 985690225
+    locked: 0
+  - name: Short Objects
+    uniqueID: 2002676199
+    locked: 0
   - name: Player Body
     uniqueID: 380918917
+    locked: 0
+  - name: Tall Shadows
+    uniqueID: 1497187465
     locked: 0
   - name: Default
     uniqueID: 0
@@ -60,6 +69,6 @@ TagManager:
   - name: Bullets
     uniqueID: 438458653
     locked: 0
-  - name: Trees
+  - name: Tall Structures
     uniqueID: 3652454079
     locked: 0

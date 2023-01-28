@@ -19,11 +19,15 @@ public class NetworkOrchestrator : MonoBehaviour
     public TMP_InputField MaxPlayers;
     public TMP_InputField lobbyName;
     public TMP_InputField mapName;
+    public Button bigBackButton;
+    public Button tryAgainButton;
     public Toggle PrivateLobby;
     //public TMP_InputField mapName;
     public bool useRandomID = true;
 
     UnityTransport transport;
+
+    Lobby lobby;
 
     private void Start()
     {
@@ -51,6 +55,7 @@ public class NetworkOrchestrator : MonoBehaviour
         catch 
         {
             explaination.text = "Failed to Authenticate";
+            tryAgainButton.gameObject.SetActive(true);
             throw;
         }
 
@@ -63,12 +68,19 @@ public class NetworkOrchestrator : MonoBehaviour
         catch
         {
             explaination.text = "Failed to Sign In";
+            tryAgainButton.gameObject.SetActive(true);
             throw;
         }
 
         explaination.text = "Signed In";
-
         enableAfterCompletion.SetActive(true);
+    }
+
+    public void ExitApp()
+    {
+        explaination.text = "quitting!";
+        Debug.Log("Quittin!");
+        Application.Quit();
     }
 
     public async void OnJoinByCodeButton()
@@ -84,6 +96,7 @@ public class NetworkOrchestrator : MonoBehaviour
         catch
         {
             explaination.text = "Failed to join Lobby";
+            bigBackButton.gameObject.SetActive(true);
             throw;
         }
 
@@ -98,6 +111,7 @@ public class NetworkOrchestrator : MonoBehaviour
         catch
         {
             explaination.text = "Failed getting Relay Joincode";
+            bigBackButton.gameObject.SetActive(true);
             throw;
         }
 
@@ -120,6 +134,7 @@ public class NetworkOrchestrator : MonoBehaviour
         catch 
         {
             explaination.text = "Failed to find Lobby, consider making one!";
+            bigBackButton.gameObject.SetActive(true);
             throw;
         }
 
@@ -134,6 +149,7 @@ public class NetworkOrchestrator : MonoBehaviour
         catch
         {
             explaination.text = "Failed getting Relay Joincode";
+            bigBackButton.gameObject.SetActive(true);
             throw;
         }
 
@@ -158,6 +174,7 @@ public class NetworkOrchestrator : MonoBehaviour
         catch 
         {
             explaination.text = "Failed to create relay allocation";
+            bigBackButton.gameObject.SetActive(true);
             throw;
         }
 
@@ -172,11 +189,9 @@ public class NetworkOrchestrator : MonoBehaviour
         catch
         {
             explaination.text = "Failed to get Relay Allocation Join Code";
+            bigBackButton.gameObject.SetActive(true);
             throw;
         }
-
-
-        Lobby lobby;
 
         Dictionary<string, DataObject> lobbyOptionsData = new();
 
@@ -198,6 +213,7 @@ public class NetworkOrchestrator : MonoBehaviour
         catch 
         {
             explaination.text = "Failed to create lobby";
+            bigBackButton.gameObject.SetActive(true);
             throw;
         }
 

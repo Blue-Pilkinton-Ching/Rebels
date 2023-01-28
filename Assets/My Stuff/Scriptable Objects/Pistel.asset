@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Pistel
   m_EditorClassIdentifier: 
   ViewFactor: 0.8
+  CameraOrthographicSize: 2.3
   WeaponType: 0
   MoveForce: 1
   BulletSpeed: 50
@@ -32,3 +33,36 @@ MonoBehaviour:
     pitchVarience: 0
   weaponInacurracy: 3
   damageAmount: 3
+  bulletChanceCollide:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.0027160645
+      inSlope: 1.1942781
+      outSlope: 1.1942781
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.12238778
+    - serializedVersion: 3
+      time: 4.2909718
+      value: 65.15731
+      inSlope: 28.05574
+      outSlope: 28.05574
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.0866117
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 6.960646
+      value: 100.0648
+      inSlope: 0.8583701
+      outSlope: 0.8583701
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.16947602
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

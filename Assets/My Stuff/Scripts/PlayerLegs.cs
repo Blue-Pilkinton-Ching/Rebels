@@ -89,8 +89,8 @@ public class PlayerLegs : NetworkBehaviour, IDamageable
     {
         if (!dead)
         {
-            sr.DOColor(GameManager.Singleton.PlayerDamageColor, GameManager.Singleton.PlayerDamageFlashTime * 0.25f).SetEase(Ease.OutSine).OnComplete(() =>
-                sr.DOColor(Color.white, GameManager.Singleton.PlayerDamageFlashTime * 0.25f).SetEase(Ease.OutSine).SetDelay(GameManager.Singleton.PlayerDamageFlashTime * 0.5f)
+            sr.DOColor(PlayerController.Players[OwnerClientId].PlayerDamageColor, PlayerController.Players[OwnerClientId].PlayerDamageFlashTime * 0.25f).SetEase(Ease.OutSine).OnComplete(() =>
+                sr.DOColor(Color.white, PlayerController.Players[OwnerClientId].PlayerDamageFlashTime * 0.25f).SetEase(Ease.OutSine).SetDelay(PlayerController.Players[OwnerClientId].PlayerDamageFlashTime * 0.5f)
                 );
         }
         else
