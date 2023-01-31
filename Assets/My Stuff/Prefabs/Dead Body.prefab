@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2772386841213102367}
   - component: {fileID: 741262156187793237}
   - component: {fileID: 2575717219170533805}
+  - component: {fileID: 2361914940299246269}
   m_Layer: 0
   m_Name: Dead Body
   m_TagString: Untagged
@@ -72,7 +73,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 898150497
-  m_SortingLayer: -3
+  m_SortingLayer: -6
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 8312acbc0b9d9bf4fb9198866fc416a6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -105,3 +106,17 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &2361914940299246269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7486358693312954606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34a0833ac7052954e94d774df1cfa317, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deadBodyAliveTime: 90
+  disapearCollider: {fileID: 0}

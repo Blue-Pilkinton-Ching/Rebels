@@ -10,8 +10,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Singleton;
     public GameObject playerPrefab;
-    [Range(0, 1)]
-    public float soundBlend = 0.8f;
 
     public Transform Focus;
     public CinemachineVirtualCamera Camera;

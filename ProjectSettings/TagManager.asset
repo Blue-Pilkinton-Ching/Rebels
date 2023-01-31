@@ -66,9 +66,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Bullets
-    uniqueID: 438458653
-    locked: 0
   - name: Tall Structures
     uniqueID: 3652454079
+    locked: 0
+  - name: Bullets
+    uniqueID: 438458653
     locked: 0

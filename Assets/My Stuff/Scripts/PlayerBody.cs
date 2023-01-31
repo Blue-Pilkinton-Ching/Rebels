@@ -49,7 +49,6 @@ public class PlayerBody : NetworkBehaviour, IDamageable
 
         if (!IsOwner)
         {
-            BulletShootAudioSource.spatialBlend = GameManager.Singleton.soundBlend;
             return;
         }
 

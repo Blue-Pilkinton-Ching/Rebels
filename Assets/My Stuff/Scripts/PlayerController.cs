@@ -9,6 +9,7 @@ public class PlayerController : NetworkBehaviour
 {
     public static PlayerController[] Players;
 
+    public AudioListener AudioListener;
     public Weapon Weapon;
     public GameObject PlayerDeath;
     public AudioSource BulletTakeAudioSource;
@@ -23,6 +24,7 @@ public class PlayerController : NetworkBehaviour
     private float defaultHealth = 10;
     [SerializeField]
     private float camOrthogrphicChangeSpeed = 1;
+
 
     public float AngleToMouse { get; private set; }
     public float Health { get; private set; }
@@ -52,6 +54,7 @@ public class PlayerController : NetworkBehaviour
         if (!IsOwner)
         {
             Destroy(playerInput);
+            Destroy(AudioListener.gameObject);
             return;
         }
 

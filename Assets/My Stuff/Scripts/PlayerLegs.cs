@@ -34,7 +34,6 @@ public class PlayerLegs : NetworkBehaviour, IDamageable
 
         if (!IsOwner)
         {
-            footstepAudioSource.spatialBlend = GameManager.Singleton.soundBlend;
             return;
         }
 
