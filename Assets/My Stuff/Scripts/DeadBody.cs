@@ -10,7 +10,7 @@ public class DeadBody : MonoBehaviour
 
     private void Start()
     {
-        Invoke("SetDisapear", deadBodyAliveTime);
+        Invoke("TryDisapear", deadBodyAliveTime);
     }
 
     private void SetDisapear()

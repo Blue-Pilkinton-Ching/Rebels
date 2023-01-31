@@ -7,7 +7,7 @@ public class SpawnController : MonoBehaviour
     public static SpawnController Singleton;
 
     public float rangeForPlayerToSpawn = 7;
-    public Transform[] spawnLocations;
+    private Transform[] spawnLocations;
     private void Awake()
     {
         Singleton = this;
@@ -15,23 +15,31 @@ public class SpawnController : MonoBehaviour
     }
     public Vector3 GetSpawnLocation()
     {
-        int val = Random.Range(0, spawnLocations.Length);
+        int val = Random.Range(0, Singleton.spawnLocations.Length - 1);
+        
         bool withinRangeOfPlayer = false;
 
-        for (int i = val; i < spawnLocations.Length; i++)
+        for (int i = val; i < Singleton.spawnLocations.Length + val; i++)
         {
-            if (i > spawnLocations.Length)
+            int index;
+
+            if (val + i > Singleton.spawnLocations.Length - 1)
             {
-                val = i - spawnLocations.Length;
+                index = i - (Singleton.spawnLocations.Length - 1);
             }
             else
             {
-                val = i;
+                index = i;
             }
 
             foreach (PlayerController player in PlayerController.Players)
             {
-                if (Vector2.Distance(player.transform.position, spawnLocations[val].position) <= rangeForPlayerToSpawn)
+                if (player == null)
+                {
+                    continue;
+                }
+
+                if (Vector2.Distance(player.transform.position, Singleton.spawnLocations[index].position) <= Singleton.rangeForPlayerToSpawn)
                 {
                     withinRangeOfPlayer = true;
                     break;
@@ -40,6 +48,7 @@ public class SpawnController : MonoBehaviour
 
             if (!withinRangeOfPlayer)
             {
+                val = index;
                 break;
             }
         }

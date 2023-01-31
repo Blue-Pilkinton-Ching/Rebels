@@ -17,6 +17,7 @@ public class PlayerBody : NetworkBehaviour, IDamageable
 
     private Animator anm;
     private SpriteRenderer sr;
+    private PlayerController player;
 
     [Tooltip("This array should contain the colliders of the player that shot, and any vehicals they are in")]
     private Collider2D[] IgnoreColliders;
@@ -43,8 +44,13 @@ public class PlayerBody : NetworkBehaviour, IDamageable
         IgnoreColliders = PlayerController.Players[OwnerClientId].GetComponentsInChildren<Collider2D>();
 
         sr = GetComponent<SpriteRenderer>();
-        PlayerController.Players[OwnerClientId].OnTakeDamage += OnTakeDamage;
-        PlayerController.Players[OwnerClientId].OnWeaponChange += OnWeaponChange;
+
+        player = PlayerController.Players[OwnerClientId];
+
+        player.OnTakeDamage += OnTakeDamage;
+        player.OnWeaponChange += OnWeaponChange;
+        player.OnRespawn += OnRespawn;
+
         weapon = PlayerController.Players[OwnerClientId].Weapon;
 
         if (!IsOwner)
@@ -62,7 +68,6 @@ public class PlayerBody : NetworkBehaviour, IDamageable
             anm.speed = 1 * weapon.MoveForce;
         }
     }
-
     private void Update()
     {
         if (!IsOwner)
@@ -104,7 +109,7 @@ public class PlayerBody : NetworkBehaviour, IDamageable
 
     private void FireShot()
     {
-        if (shooting == false)
+        if (shooting == false && player.IsAlive)
         {
             aimAngle = -1 * (Mathf.Atan2(GameManager.Singleton.Focus.position.y - transform.position.y, GameManager.Singleton.Focus.position.x - transform.position.x) - ((Random.Range(-weapon.weaponInacurracy, weapon.weaponInacurracy) + 90) * Mathf.Deg2Rad));
 
@@ -199,18 +204,23 @@ public class PlayerBody : NetworkBehaviour, IDamageable
         AudioManager.PlayVariedAudio(BulletHitAudioSource, weapon.weaponHitClips);
         target.TakeDamage(damageAmount);
     }
+    private void OnRespawn()
+    {
+        sr.color = new Color(1, 1, 1, 1);
+    }
+
 
     void OnTakeDamage(float damage, bool dead)
     {
-        if (!dead)
+        if (dead)
         {
-            sr.DOColor(PlayerController.Players[OwnerClientId].PlayerDamageColor, PlayerController.Players[OwnerClientId].PlayerDamageFlashTime / 2).SetEase(Ease.OutSine).OnComplete(() =>
-                sr.DOColor(Color.white, PlayerController.Players[OwnerClientId].PlayerDamageFlashTime / 2).SetEase(Ease.OutSine)
-                );
+            sr.color = new Color(0, 0, 0, 0);
         }
         else
         {
-            gameObject.SetActive(false);
+            sr.DOColor(player.PlayerDamageColor, player.PlayerDamageFlashTime / 2).SetEase(Ease.OutSine).OnComplete(() =>
+                sr.DOColor(Color.white, player.PlayerDamageFlashTime / 2).SetEase(Ease.OutSine)
+                    );
         }
     }
 }

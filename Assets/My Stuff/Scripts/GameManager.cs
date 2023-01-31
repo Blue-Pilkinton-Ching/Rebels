@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
 
     public Transform Focus;
     public CinemachineVirtualCamera Camera;
+    public Canvas PlayerDeadCanvas;
 
     public AudioClip[] soundtracks;
     public AudioSource soundTrackSource;
@@ -34,6 +35,7 @@ public class GameManager : MonoBehaviour
         PlayerController.Players = new PlayerController[maxPlayers];
 
         NetworkManager.Singleton.OnClientConnectedCallback += ClientConnected;
+
         if (NetworkManager.Singleton.IsServer)
         {
             ClientConnected(NetworkManager.Singleton.LocalClientId);
@@ -46,12 +48,19 @@ public class GameManager : MonoBehaviour
         soundTrackSource.Play();
         Invoke("PlayRandomSoundTrack", Random.Range(20, 60) + soundTrackSource.clip.length);
     }
+    public void Respawn()
+    {
+        PlayerController.Players[NetworkManager.Singleton.LocalClientId].Respawn();
+    }
 
     private void ClientConnected(ulong id)
     {
+        Debug.Log("Client Connected: " + id);
+
         if (NetworkManager.Singleton.IsServer)
         {
             GameObject go = Instantiate(playerPrefab);
+            go.transform.position = SpawnController.Singleton.GetSpawnLocation();
             go.GetComponent<NetworkObject>().SpawnWithOwnership(id);
         }
     }

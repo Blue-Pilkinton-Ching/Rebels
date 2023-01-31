@@ -16,7 +16,7 @@ public class PlayerController : NetworkBehaviour
 
     private PlayerInput playerInput;
     private Rigidbody2D rb;
-    private Collider2D collider2d;
+    private Collider2D thisCollider;
 
     [SerializeField]
     private float defaultMovementForce = 2;
@@ -25,11 +25,13 @@ public class PlayerController : NetworkBehaviour
     [SerializeField]
     private float camOrthogrphicChangeSpeed = 1;
 
+    public bool IsAlive { get; private set; } = true;
 
     public float AngleToMouse { get; private set; }
     public float Health { get; private set; }
     public Action OnWeaponChange;
     public Action<float, bool> OnTakeDamage;
+    public Action OnRespawn;
 
     private Vector2 inputMovement;
     private Camera main;
@@ -46,15 +48,17 @@ public class PlayerController : NetworkBehaviour
     {
         Players[OwnerClientId] = this;
         playerInput = GetComponent<PlayerInput>();
-        collider2d = GetComponent<Collider2D>();
+        thisCollider = GetComponent<Collider2D>();
+
         OnWeaponChange += OnThisWeaponChange;
+        OnRespawn += OnThisRespawn;
 
         Health = defaultHealth;
 
         if (!IsOwner)
         {
             Destroy(playerInput);
-            Destroy(AudioListener.gameObject);
+            Destroy(AudioListener);
             return;
         }
 
@@ -85,7 +89,11 @@ public class PlayerController : NetworkBehaviour
         AngleToMouse = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
         mousePos = main.ScreenToWorldPoint(new Vector3(Mathf.Clamp(Input.mousePosition.x, 0, main.pixelWidth), Mathf.Clamp(Input.mousePosition.y, 0, main.pixelHeight), 0));
-        GameManager.Singleton.Focus.position = mousePos - ((mousePos - transform.position) * Weapon.ViewFactor);
+
+        if (IsAlive)
+        {
+            GameManager.Singleton.Focus.position = mousePos - ((mousePos - transform.position) * Weapon.ViewFactor);
+        }
     }
 
     private void FixedUpdate()
@@ -95,7 +103,7 @@ public class PlayerController : NetworkBehaviour
             return;
         }
 
-        if (Health > 0)
+        if (Health > 0 && IsAlive)
         {
             rb.AddForce(new Vector2(inputMovement.x, inputMovement.y) * defaultMovementForce * Weapon.MoveForce, ForceMode2D.Force);
         }
@@ -108,8 +116,14 @@ public class PlayerController : NetworkBehaviour
 
     private void Die()
     {
-        collider2d.enabled = false;
-        Instantiate(PlayerDeath, transform);
+        IsAlive = false;
+        thisCollider.enabled = false;
+        Instantiate(PlayerDeath, transform.position, Quaternion.identity);
+
+        if (IsOwner)
+        {
+            GameManager.Singleton.PlayerDeadCanvas.gameObject.SetActive(true);
+        }
     }
 
     public void TakeDamage(float damage)
@@ -152,6 +166,39 @@ public class PlayerController : NetworkBehaviour
         if (Health <= 0)
         {
             Die();
+        }
+    }
+
+    public void Respawn()
+    {
+        RespawnServerRPC();
+    }
+
+    [ServerRpc]
+    private void RespawnServerRPC()
+    {
+        RespawnClientRPC();
+    }
+
+    [ClientRpc]
+    private void RespawnClientRPC()
+    {
+        IsAlive = true;
+
+        if (IsOwner)
+        {
+            thisCollider.enabled = true;
+            OnRespawn.Invoke();
+        }
+    }
+
+    private void OnThisRespawn()
+    {
+        Health = defaultHealth;
+
+        if (IsOwner)
+        {
+            transform.position = SpawnController.Singleton.GetSpawnLocation();
         }
     }
 }

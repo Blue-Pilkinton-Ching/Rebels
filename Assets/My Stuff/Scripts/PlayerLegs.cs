@@ -12,6 +12,7 @@ public class PlayerLegs : NetworkBehaviour, IDamageable
 
     private Animator anm;
     private SpriteRenderer sr;
+    private PlayerController player;
 
     public float rotateSpeed;
 
@@ -30,7 +31,9 @@ public class PlayerLegs : NetworkBehaviour, IDamageable
     public override void OnNetworkSpawn()
     {
         sr = GetComponent<SpriteRenderer>();
-        PlayerController.Players[OwnerClientId].OnTakeDamage += OnTakeDamage;
+        player = PlayerController.Players[OwnerClientId];
+        player.OnTakeDamage += OnTakeDamage;
+        player.OnRespawn += OnRespawn;
 
         if (!IsOwner)
         {
@@ -81,20 +84,28 @@ public class PlayerLegs : NetworkBehaviour, IDamageable
     }
     public void Footstep()
     {
-        footstepAudioSource.PlayOneShot(footstepClips[Random.Range(0, footstepClips.Length)]);
+        if (player.IsAlive)
+        {
+            footstepAudioSource.PlayOneShot(footstepClips[Random.Range(0, footstepClips.Length)]);
+        }
+    }
+
+    private void OnRespawn()
+    {
+        sr.color = new Color(1, 1, 1, 1);
     }
 
     void OnTakeDamage(float damage, bool dead)
     {
-        if (!dead)
+        if (dead)
         {
-            sr.DOColor(PlayerController.Players[OwnerClientId].PlayerDamageColor, PlayerController.Players[OwnerClientId].PlayerDamageFlashTime * 0.25f).SetEase(Ease.OutSine).OnComplete(() =>
-                sr.DOColor(Color.white, PlayerController.Players[OwnerClientId].PlayerDamageFlashTime * 0.25f).SetEase(Ease.OutSine).SetDelay(PlayerController.Players[OwnerClientId].PlayerDamageFlashTime * 0.5f)
-                );
+            sr.color = new Color(1, 1, 1, 0);
         }
         else
         {
-            gameObject.SetActive(false);
+            sr.DOColor(player.PlayerDamageColor, player.PlayerDamageFlashTime * 0.25f).SetEase(Ease.OutSine).OnComplete(() =>
+                sr.DOColor(Color.white, player.PlayerDamageFlashTime * 0.25f).SetEase(Ease.OutSine).SetDelay(player.PlayerDamageFlashTime * 0.5f)
+                    );
         }
     }
 }

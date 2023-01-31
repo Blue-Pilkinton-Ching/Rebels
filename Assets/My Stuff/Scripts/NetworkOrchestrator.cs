@@ -131,7 +131,7 @@ public class NetworkOrchestrator : MonoBehaviour
         {
             lobby = await Lobbies.Instance.QuickJoinLobbyAsync();
         }
-        catch 
+        catch
         {
             explaination.text = "Failed to find Lobby, consider making one!";
             bigBackButton.gameObject.SetActive(true);
@@ -169,7 +169,7 @@ public class NetworkOrchestrator : MonoBehaviour
 
         try
         {
-            a = await RelayService.Instance.CreateAllocationAsync(int.Parse(MaxPlayers.text));
+            a = await RelayService.Instance.CreateAllocationAsync(maxPlayers);
         }
         catch 
         {
@@ -208,7 +208,7 @@ public class NetworkOrchestrator : MonoBehaviour
         explaination.text = "Creating Lobby";
         try
         {
-            lobby = await Lobbies.Instance.CreateLobbyAsync(lobbyName.text, int.Parse(MaxPlayers.text), lobbyOptions);
+            lobby = await Lobbies.Instance.CreateLobbyAsync(lobbyName.text, maxPlayers, lobbyOptions);
         }
         catch 
         {
@@ -218,6 +218,7 @@ public class NetworkOrchestrator : MonoBehaviour
         }
 
         explaination.text = "Sucessfully created lobby: " + lobby.LobbyCode;
+        Debug.Log("Lobby Code: "+ lobby.LobbyCode);
 
         NetworkHelper.Singleton.StartCoroutine(NetworkHelper.Singleton.LobbyHeartBeat(lobby.Id));
 
