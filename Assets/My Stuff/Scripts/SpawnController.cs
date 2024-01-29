@@ -8,25 +8,23 @@ public class SpawnController : MonoBehaviour
     public static SpawnController Singleton;
 
     public float rangeForPlayerToSpawn = 7;
-    private Transform[] spawnLocations;
+    private List<Transform> spawnLocations = new List<Transform>();
     private void Awake()
     {
         Singleton = this;
-        spawnLocations = new Transform[transform.childCount];
 
-        for (int i = 0; i < spawnLocations.Length; i++)
+        for (int i = 0; i < transform.childCount; i++)
         {
             if (transform.GetChild(i).gameObject.activeInHierarchy)
             {
-                spawnLocations[i] = transform.GetChild(i);
+                spawnLocations.Add(transform.GetChild(i));
             }
         }
+
     }
     public Vector3 GetSpawnLocation()
     {
-        int randomIndex = Random.Range(0, Singleton.spawnLocations.Length);
-
-        Debug.Log(randomIndex);
+        int randomIndex = Random.Range(0, Singleton.spawnLocations.Count);
 
         return Singleton.spawnLocations[randomIndex].position;
     }
