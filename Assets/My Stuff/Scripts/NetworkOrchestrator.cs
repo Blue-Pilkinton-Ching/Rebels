@@ -52,7 +52,7 @@ public class NetworkOrchestrator : MonoBehaviour
         {
             await UnityServices.InitializeAsync(initializationOptions);
         }
-        catch 
+        catch
         {
             explaination.text = "Failed to Authenticate";
             tryAgainButton.gameObject.SetActive(true);
@@ -64,6 +64,7 @@ public class NetworkOrchestrator : MonoBehaviour
         try
         {
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
+
         }
         catch
         {
@@ -171,7 +172,7 @@ public class NetworkOrchestrator : MonoBehaviour
         {
             a = await RelayService.Instance.CreateAllocationAsync(maxPlayers);
         }
-        catch 
+        catch
         {
             explaination.text = "Failed to create relay allocation";
             bigBackButton.gameObject.SetActive(true);
@@ -210,7 +211,7 @@ public class NetworkOrchestrator : MonoBehaviour
         {
             lobby = await Lobbies.Instance.CreateLobbyAsync(lobbyName.text, maxPlayers, lobbyOptions);
         }
-        catch 
+        catch
         {
             explaination.text = "Failed to create lobby";
             bigBackButton.gameObject.SetActive(true);
@@ -218,7 +219,7 @@ public class NetworkOrchestrator : MonoBehaviour
         }
 
         explaination.text = "Sucessfully created lobby: " + lobby.LobbyCode;
-        Debug.Log("Lobby Code: "+ lobby.LobbyCode);
+        Debug.Log("Lobby Code: " + lobby.LobbyCode);
 
         NetworkHelper.Singleton.StartCoroutine(NetworkHelper.Singleton.LobbyHeartBeat(lobby.Id));
 

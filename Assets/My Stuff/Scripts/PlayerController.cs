@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerController : NetworkBehaviour
 {
@@ -44,11 +45,15 @@ public class PlayerController : NetworkBehaviour
     IReadOnlyList<ulong> connectedClients;
     List<ulong> ids;
 
+    Light2D lightCover;
+
     public override void OnNetworkSpawn()
     {
         Players[OwnerClientId] = this;
         playerInput = GetComponent<PlayerInput>();
         thisCollider = GetComponent<Collider2D>();
+
+        lightCover = GetComponent<Light2D>();
 
         OnWeaponChange += OnThisWeaponChange;
         OnRespawn += OnThisRespawn;
@@ -59,6 +64,7 @@ public class PlayerController : NetworkBehaviour
         {
             Destroy(playerInput);
             Destroy(AudioListener);
+            Destroy(lightCover);
             return;
         }
 
@@ -73,8 +79,8 @@ public class PlayerController : NetworkBehaviour
 
     private void OnThisWeaponChange()
     {
-        DOTween.To(() => GameManager.Singleton.Camera.m_Lens.OrthographicSize, 
-            x => GameManager.Singleton.Camera.m_Lens.OrthographicSize = x, 
+        DOTween.To(() => GameManager.Singleton.Camera.m_Lens.OrthographicSize,
+            x => GameManager.Singleton.Camera.m_Lens.OrthographicSize = x,
             Weapon.CameraOrthographicSize, camOrthogrphicChangeSpeed).SetEase(Ease.OutSine);
     }
 
