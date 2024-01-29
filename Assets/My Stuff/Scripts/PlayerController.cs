@@ -177,6 +177,7 @@ public class PlayerController : NetworkBehaviour
     [ServerRpc]
     private void RespawnServerRPC()
     {
+        transform.position = SpawnController.Singleton.GetSpawnLocation();
         RespawnClientRPC();
     }
 
@@ -184,21 +185,12 @@ public class PlayerController : NetworkBehaviour
     private void RespawnClientRPC()
     {
         IsAlive = true;
-
-        if (IsOwner)
-        {
-            thisCollider.enabled = true;
-            OnRespawn.Invoke();
-        }
+        thisCollider.enabled = true;
+        OnRespawn.Invoke();
     }
 
     private void OnThisRespawn()
     {
         Health = defaultHealth;
-
-        if (IsOwner)
-        {
-            transform.position = SpawnController.Singleton.GetSpawnLocation();
-        }
     }
 }

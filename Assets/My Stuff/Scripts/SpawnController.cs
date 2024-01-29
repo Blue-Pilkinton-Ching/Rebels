@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class SpawnController : MonoBehaviour
@@ -11,48 +12,22 @@ public class SpawnController : MonoBehaviour
     private void Awake()
     {
         Singleton = this;
-        spawnLocations = transform.GetComponentsInChildren<Transform>();
+        spawnLocations = new Transform[transform.childCount];
+
+        for (int i = 0; i < spawnLocations.Length; i++)
+        {
+            if (transform.GetChild(i).gameObject.activeInHierarchy)
+            {
+                spawnLocations[i] = transform.GetChild(i);
+            }
+        }
     }
     public Vector3 GetSpawnLocation()
     {
-        int val = Random.Range(0, Singleton.spawnLocations.Length - 1);
-        
-        bool withinRangeOfPlayer = false;
+        int randomIndex = Random.Range(0, Singleton.spawnLocations.Length);
 
-        for (int i = val; i < Singleton.spawnLocations.Length + val; i++)
-        {
-            int index;
+        Debug.Log(randomIndex);
 
-            if (val + i > Singleton.spawnLocations.Length - 1)
-            {
-                index = i - (Singleton.spawnLocations.Length - 1);
-            }
-            else
-            {
-                index = i;
-            }
-
-            foreach (PlayerController player in PlayerController.Players)
-            {
-                if (player == null)
-                {
-                    continue;
-                }
-
-                if (Vector2.Distance(player.transform.position, Singleton.spawnLocations[index].position) <= Singleton.rangeForPlayerToSpawn)
-                {
-                    withinRangeOfPlayer = true;
-                    break;
-                }
-            }
-
-            if (!withinRangeOfPlayer)
-            {
-                val = index;
-                break;
-            }
-        }
-
-        return spawnLocations[val].position;
+        return Singleton.spawnLocations[randomIndex].position;
     }
 }
