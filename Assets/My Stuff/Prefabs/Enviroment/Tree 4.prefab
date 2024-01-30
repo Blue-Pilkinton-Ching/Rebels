@@ -117,11 +117,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb59f4bf22287c54db9d6b4515e116c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TimeUntilShake: 2
-  ShakeDistance: 0.05
+  TimeUntilShake: 1.5
+  ShakeDistance: 0.03
   ShakeTime: 1
-  ShakeAmount: 4
-  EasePeriod: -0.7
+  ShakeAmount: 5
+  EasePeriod: -0.6
   triggerCollider: {fileID: 4512961427617275163}
 --- !u!1 &1800383664079594420
 GameObject:

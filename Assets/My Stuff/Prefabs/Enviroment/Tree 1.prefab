@@ -100,11 +100,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb59f4bf22287c54db9d6b4515e116c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TimeUntilShake: 2
-  ShakeDistance: 0.05
+  TimeUntilShake: 1.5
+  ShakeDistance: 0.03
   ShakeTime: 1
-  ShakeAmount: 4
-  EasePeriod: -0.7
+  ShakeAmount: 5
+  EasePeriod: -0.6
   triggerCollider: {fileID: 5819492166021762242}
 --- !u!58 &5819492166021762242
 CircleCollider2D:

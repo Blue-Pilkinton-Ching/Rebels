@@ -1,6 +1,7 @@
-using DG.Tweening;
 using System;
 using System.Collections.Generic;
+using Cinemachine;
+using DG.Tweening;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,15 +15,16 @@ public class PlayerController : NetworkBehaviour
     public Weapon Weapon;
     public GameObject PlayerDeath;
     public AudioSource BulletTakeAudioSource;
-
     private PlayerInput playerInput;
     private Rigidbody2D rb;
     private Collider2D thisCollider;
 
     [SerializeField]
     private float defaultMovementForce = 2;
+
     [SerializeField]
     private float defaultHealth = 10;
+
     [SerializeField]
     private float camOrthogrphicChangeSpeed = 1;
 
@@ -79,9 +81,14 @@ public class PlayerController : NetworkBehaviour
 
     private void OnThisWeaponChange()
     {
-        DOTween.To(() => GameManager.Singleton.Camera.m_Lens.OrthographicSize,
-            x => GameManager.Singleton.Camera.m_Lens.OrthographicSize = x,
-            Weapon.CameraOrthographicSize, camOrthogrphicChangeSpeed).SetEase(Ease.OutSine);
+        DOTween
+            .To(
+                () => GameManager.Singleton.Camera.m_Lens.OrthographicSize,
+                x => GameManager.Singleton.Camera.m_Lens.OrthographicSize = x,
+                Weapon.CameraOrthographicSize,
+                camOrthogrphicChangeSpeed
+            )
+            .SetEase(Ease.OutSine);
     }
 
     private void Update()
@@ -94,11 +101,18 @@ public class PlayerController : NetworkBehaviour
         dir = mousePos - transform.position;
         AngleToMouse = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-        mousePos = main.ScreenToWorldPoint(new Vector3(Mathf.Clamp(Input.mousePosition.x, 0, main.pixelWidth), Mathf.Clamp(Input.mousePosition.y, 0, main.pixelHeight), 0));
+        mousePos = main.ScreenToWorldPoint(
+            new Vector3(
+                Mathf.Clamp(Input.mousePosition.x, 0, main.pixelWidth),
+                Mathf.Clamp(Input.mousePosition.y, 0, main.pixelHeight),
+                0
+            )
+        );
 
         if (IsAlive)
         {
-            GameManager.Singleton.Focus.position = mousePos - ((mousePos - transform.position) * Weapon.ViewFactor);
+            GameManager.Singleton.Focus.position =
+                mousePos - ((mousePos - transform.position) * Weapon.ViewFactor);
         }
     }
 
@@ -111,7 +125,12 @@ public class PlayerController : NetworkBehaviour
 
         if (Health > 0 && IsAlive)
         {
-            rb.AddForce(new Vector2(inputMovement.x, inputMovement.y) * defaultMovementForce * Weapon.MoveForce, ForceMode2D.Force);
+            rb.AddForce(
+                new Vector2(inputMovement.x, inputMovement.y)
+                    * defaultMovementForce
+                    * Weapon.MoveForce,
+                ForceMode2D.Force
+            );
         }
     }
 
@@ -151,7 +170,10 @@ public class PlayerController : NetworkBehaviour
                 ids.Add(connectedClients[i]);
             }
         }
-        TakeDamageClientRPC(damage, new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = ids } });
+        TakeDamageClientRPC(
+            damage,
+            new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = ids } }
+        );
     }
 
     [ClientRpc]

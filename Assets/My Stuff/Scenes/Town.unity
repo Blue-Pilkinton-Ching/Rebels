@@ -28101,6 +28101,26 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
+  - first: {x: -14, y: 20, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 42
+      m_TileSpriteIndex: 42
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
+  - first: {x: -14, y: 21, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 47
+      m_TileSpriteIndex: 47
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
   m_AnimatedTiles: {}
   m_TileAssetArray:
   - m_RefCount: 1
@@ -28187,7 +28207,7 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: 6ac834ce128439249a715cf3b307a040, type: 2}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: 9563409e1995b104f9ed7f9691013f14, type: 2}
-  - m_RefCount: 1
+  - m_RefCount: 2
     m_Data: {fileID: 11400000, guid: ca97a71db5282e3439ce9e66d68d2d44, type: 2}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: 3b7ecc414d83fcb4386cf9cd4a8ab604, type: 2}
@@ -28197,7 +28217,7 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: 9cc7ba2f3a9ae89479c4516b329e3122, type: 2}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: d519846603850164daa755c155b8d487, type: 2}
-  - m_RefCount: 1
+  - m_RefCount: 2
     m_Data: {fileID: 11400000, guid: 0c1a1af0ba40598419135feffae38db6, type: 2}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: c09e8f3f2bf41a848bb908b0f07264fc, type: 2}
@@ -28310,7 +28330,7 @@ Tilemap:
     m_Data: {fileID: 974108384, guid: 7ea39e69dd7e47441bc0ce47d4cdfbfe, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -594925364, guid: 7ea39e69dd7e47441bc0ce47d4cdfbfe, type: 3}
-  - m_RefCount: 1
+  - m_RefCount: 2
     m_Data: {fileID: 1792938339, guid: 7ea39e69dd7e47441bc0ce47d4cdfbfe, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -2099663375, guid: 7ea39e69dd7e47441bc0ce47d4cdfbfe, type: 3}
@@ -28320,7 +28340,7 @@ Tilemap:
     m_Data: {fileID: -642419993, guid: 7ea39e69dd7e47441bc0ce47d4cdfbfe, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -2000996834, guid: 7ea39e69dd7e47441bc0ce47d4cdfbfe, type: 3}
-  - m_RefCount: 1
+  - m_RefCount: 2
     m_Data: {fileID: -569339079, guid: 7ea39e69dd7e47441bc0ce47d4cdfbfe, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -1958721854, guid: 7ea39e69dd7e47441bc0ce47d4cdfbfe, type: 3}
@@ -28349,7 +28369,7 @@ Tilemap:
   - m_RefCount: 1
     m_Data: {fileID: -1308823628, guid: 32ed8019d3fbbf04cbce41de4f35ddcd, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 87
+  - m_RefCount: 89
     m_Data:
       e00: 1
       e01: 0
@@ -28368,13 +28388,13 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 87
+  - m_RefCount: 89
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -21, y: -23, z: 0}
-  m_Size: {x: 44, y: 26, z: 1}
+  m_Size: {x: 44, y: 45, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
@@ -79796,6 +79816,7 @@ GameObject:
   - component: {fileID: 2061633640}
   - component: {fileID: 2061633642}
   - component: {fileID: 2061633643}
+  - component: {fileID: 2061633644}
   m_Layer: 0
   m_Name: Virtual Cam
   m_TagString: Untagged
@@ -79968,6 +79989,29 @@ MonoBehaviour:
   m_BoundingShape2D: {fileID: 718437449}
   m_Damping: 0
   m_MaxWindowSize: -1
+--- !u!114 &2061633644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2061633639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b2d199b96b516448144ab30fb26aed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ApplyAfter: 2
+  m_ChannelMask: 1
+  m_Gain: 1
+  m_Use2DDistance: 1
+  m_UseCameraSpace: 1
+  m_ReactionSettings:
+    m_SecondaryNoise: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_Duration: 1
+    m_NoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!4 &2067016488 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5487835830903002906, guid: 04fb53aea09641e4eb541b174f975075, type: 3}

@@ -1,7 +1,8 @@
-using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Cinemachine;
+using DG.Tweening;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,19 +15,21 @@ public class PlayerBody : NetworkBehaviour, IDamageable
     public Transform ShootPosition;
     public LayerMask BulletLayerMask;
     public LayerMask BulletChanceLayerMask;
-
     private Animator anm;
     private SpriteRenderer sr;
     private PlayerController player;
+    private CinemachineImpulseSource shootImpulse;
 
-    [Tooltip("This array should contain the colliders of the player that shot, and any vehicals they are in")]
+    [Tooltip(
+        "This array should contain the colliders of the player that shot, and any vehicals they are in"
+    )]
     private Collider2D[] IgnoreColliders;
     private Weapon weapon;
-    
+
     private bool shooting = false;
     private bool inputFire;
     private int oldBodyState;
-    
+
     int bodyState;
     float aimAngle;
     IReadOnlyList<ulong> connectedClients;
@@ -41,9 +44,12 @@ public class PlayerBody : NetworkBehaviour, IDamageable
 
     public override void OnNetworkSpawn()
     {
-        IgnoreColliders = PlayerController.Players[OwnerClientId].GetComponentsInChildren<Collider2D>();
+        IgnoreColliders = PlayerController
+            .Players[OwnerClientId]
+            .GetComponentsInChildren<Collider2D>();
 
         sr = GetComponent<SpriteRenderer>();
+        shootImpulse = GetComponent<CinemachineImpulseSource>();
 
         player = PlayerController.Players[OwnerClientId];
 
@@ -55,6 +61,7 @@ public class PlayerBody : NetworkBehaviour, IDamageable
 
         if (!IsOwner)
         {
+            Destroy(shootImpulse);
             return;
         }
 
@@ -68,6 +75,7 @@ public class PlayerBody : NetworkBehaviour, IDamageable
             anm.speed = 1 * weapon.MoveForce;
         }
     }
+
     private void Update()
     {
         if (!IsOwner)
@@ -82,7 +90,10 @@ public class PlayerBody : NetworkBehaviour, IDamageable
             oldBodyState = bodyState;
         }
 
-        transform.rotation = Quaternion.AngleAxis(PlayerController.Players[OwnerClientId].AngleToMouse + 90, Vector3.forward);
+        transform.rotation = Quaternion.AngleAxis(
+            PlayerController.Players[OwnerClientId].AngleToMouse + 90,
+            Vector3.forward
+        );
     }
 
     public void ShootFinished()
@@ -97,10 +108,12 @@ public class PlayerBody : NetworkBehaviour, IDamageable
 
     private int GetBodyState()
     {
-        if (shooting) return fire;
+        if (shooting)
+            return fire;
 
         return pistel;
     }
+
     public void OnFire(InputAction.CallbackContext context)
     {
         inputFire = context.action.IsPressed();
@@ -111,11 +124,27 @@ public class PlayerBody : NetworkBehaviour, IDamageable
     {
         if (shooting == false && player.IsAlive)
         {
-            aimAngle = -1 * (Mathf.Atan2(GameManager.Singleton.Focus.position.y - transform.position.y, GameManager.Singleton.Focus.position.x - transform.position.x) - ((Random.Range(-weapon.weaponInacurracy, weapon.weaponInacurracy) + 90) * Mathf.Deg2Rad));
+            aimAngle =
+                -1
+                * (
+                    Mathf.Atan2(
+                        GameManager.Singleton.Focus.position.y - transform.position.y,
+                        GameManager.Singleton.Focus.position.x - transform.position.x
+                    )
+                    - (
+                        (Random.Range(-weapon.weaponInacurracy, weapon.weaponInacurracy) + 90)
+                        * Mathf.Deg2Rad
+                    )
+                );
 
             ShootPosition.localPosition = weapon.bulletFireLocation;
 
             int seed = System.Environment.TickCount;
+
+            float x = Mathf.Cos(aimAngle + 90);
+            float y = Mathf.Sin(aimAngle + 90);
+
+            shootImpulse.GenerateImpulse(new Vector3(x, y).normalized * 0.05f);
 
             FireShotServerRPC(ShootPosition.position, aimAngle, seed);
             ShootVisuals(ShootPosition.position, aimAngle, seed);
@@ -128,8 +157,17 @@ public class PlayerBody : NetworkBehaviour, IDamageable
     {
         Random.InitState(seed);
 
-        bulletRaycast = Physics2D.RaycastAll(transform.position, new Vector2(Mathf.Sin(angle), Mathf.Cos(angle)), BulletManager.Singleton.BulletMaxTravelDistance, BulletLayerMask);
-        bullet = Instantiate(weapon.bullet, position, Quaternion.AngleAxis(-1 * (angle * Mathf.Rad2Deg), Vector3.forward));
+        bulletRaycast = Physics2D.RaycastAll(
+            transform.position,
+            new Vector2(Mathf.Sin(angle), Mathf.Cos(angle)),
+            BulletManager.Singleton.BulletMaxTravelDistance,
+            BulletLayerMask
+        );
+        bullet = Instantiate(
+            weapon.bullet,
+            position,
+            Quaternion.AngleAxis(-1 * (angle * Mathf.Rad2Deg), Vector3.forward)
+        );
 
         for (int i = 0; i < bulletRaycast.Length; i++)
         {
@@ -147,7 +185,13 @@ public class PlayerBody : NetworkBehaviour, IDamageable
 
                 if (bulletRaycast[i].collider.CompareTag("Player") && IsOwner)
                 {
-                    StartCoroutine(DelayDamage(bulletRaycast[i].collider.GetComponent<PlayerController>(), weapon.damageAmount, bulletRaycast[i].distance / weapon.BulletSpeed));
+                    StartCoroutine(
+                        DelayDamage(
+                            bulletRaycast[i].collider.GetComponent<PlayerController>(),
+                            weapon.damageAmount,
+                            bulletRaycast[i].distance / weapon.BulletSpeed
+                        )
+                    );
                 }
                 else if (BulletChanceLayerMask.Includes(bulletRaycast[i].collider.gameObject.layer))
                 {
@@ -177,7 +221,12 @@ public class PlayerBody : NetworkBehaviour, IDamageable
     }
 
     [ServerRpc]
-    private void FireShotServerRPC(Vector3 position, float aimAngle, int seed, ServerRpcParams serverRpcParams = default)
+    private void FireShotServerRPC(
+        Vector3 position,
+        float aimAngle,
+        int seed,
+        ServerRpcParams serverRpcParams = default
+    )
     {
         connectedClients = NetworkManager.ConnectedClientsIds;
         ids = new List<ulong>();
@@ -189,11 +238,21 @@ public class PlayerBody : NetworkBehaviour, IDamageable
                 ids.Add(connectedClients[i]);
             }
         }
-        FireShotClientRPC(position, aimAngle, seed, new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = ids }});
+        FireShotClientRPC(
+            position,
+            aimAngle,
+            seed,
+            new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = ids } }
+        );
     }
 
     [ClientRpc]
-    private void FireShotClientRPC(Vector3 position, float aimAngle, int seed, ClientRpcParams clientRpcParams)
+    private void FireShotClientRPC(
+        Vector3 position,
+        float aimAngle,
+        int seed,
+        ClientRpcParams clientRpcParams
+    )
     {
         ShootVisuals(position, aimAngle, seed);
     }
@@ -204,11 +263,11 @@ public class PlayerBody : NetworkBehaviour, IDamageable
         AudioManager.PlayVariedAudio(BulletHitAudioSource, weapon.weaponHitClips);
         target.TakeDamage(damageAmount);
     }
+
     private void OnRespawn()
     {
         sr.color = new Color(1, 1, 1, 1);
     }
-
 
     void OnTakeDamage(float damage, bool dead)
     {
@@ -218,9 +277,13 @@ public class PlayerBody : NetworkBehaviour, IDamageable
         }
         else
         {
-            sr.DOColor(player.PlayerDamageColor, player.PlayerDamageFlashTime / 2).SetEase(Ease.OutSine).OnComplete(() =>
-                sr.DOColor(Color.white, player.PlayerDamageFlashTime / 2).SetEase(Ease.OutSine)
-                    );
+            sr.DOColor(player.PlayerDamageColor, player.PlayerDamageFlashTime / 2)
+                .SetEase(Ease.OutSine)
+                .OnComplete(
+                    () =>
+                        sr.DOColor(Color.white, player.PlayerDamageFlashTime / 2)
+                            .SetEase(Ease.OutSine)
+                );
         }
     }
 }
