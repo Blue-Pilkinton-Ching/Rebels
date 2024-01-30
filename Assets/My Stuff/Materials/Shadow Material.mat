@@ -43,13 +43,13 @@ Material:
     m_Ints: []
     m_Floats:
     - _Bounds_Scale: 2
-    - _Initial_Offset: 0.2
+    - _Initial_Offset: -0.2
     - _Offset_Multiplier: 0.2
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Rotation_Offset: 0.25
+    - _Rotation_Offset: 0.2
     - _Shadow_Offset: 0.25
-    - _Sun_Angle: 0.37
-    - _Time_Of_Day: 21.1
+    - _Sun_Angle: -0.5
+    - _Time_Of_Day: 41.768684
     m_Colors: []
   m_BuildTextureStacks: []

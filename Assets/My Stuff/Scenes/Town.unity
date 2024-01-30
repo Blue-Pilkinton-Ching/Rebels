@@ -33043,7 +33043,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2066311063360693630, guid: 21a514c6d4e5c874294adf786efc000f, type: 3}
       propertyPath: m_SortingLayer
-      value: -1
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 2066311063360693630, guid: 21a514c6d4e5c874294adf786efc000f, type: 3}
       propertyPath: m_SortingOrder
@@ -33115,7 +33115,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShadowMaterial: {fileID: 2100000, guid: e83e093e40ed8ac48b14311e2a6f20f2, type: 2}
-  SunAngle: 0.5
+  LightAngle: -0.5
   DayLength: 20
 --- !u!4 &1205811685
 Transform:
