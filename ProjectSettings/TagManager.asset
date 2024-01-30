@@ -57,17 +57,20 @@ TagManager:
   - name: Short Objects
     uniqueID: 2002676199
     locked: 0
-  - name: Player Body
-    uniqueID: 380918917
-    locked: 0
   - name: Tall Shadows
     uniqueID: 1497187465
+    locked: 0
+  - name: Tall Structures
+    uniqueID: 3652454079
+    locked: 0
+  - name: Player Body
+    uniqueID: 380918917
     locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Tall Structures
-    uniqueID: 3652454079
+  - name: Trees
+    uniqueID: 3615577405
     locked: 0
   - name: Bullets
     uniqueID: 438458653
