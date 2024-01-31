@@ -18,6 +18,7 @@ public class PlayerController : NetworkBehaviour
     private PlayerInput playerInput;
     private Rigidbody2D rb;
     private Collider2D thisCollider;
+    private CinemachineImpulseSource takeDamageImpulseSource;
 
     [SerializeField]
     private float defaultMovementForce = 2;
@@ -54,6 +55,7 @@ public class PlayerController : NetworkBehaviour
         Players[OwnerClientId] = this;
         playerInput = GetComponent<PlayerInput>();
         thisCollider = GetComponent<Collider2D>();
+        takeDamageImpulseSource = GetComponent<CinemachineImpulseSource>();
 
         lightCover = GetComponent<Light2D>();
 
@@ -67,6 +69,7 @@ public class PlayerController : NetworkBehaviour
             Destroy(playerInput);
             Destroy(AudioListener);
             Destroy(lightCover);
+            Destroy(takeDamageImpulseSource);
             return;
         }
 
@@ -114,6 +117,8 @@ public class PlayerController : NetworkBehaviour
             GameManager.Singleton.Focus.position =
                 mousePos - ((mousePos - transform.position) * Weapon.ViewFactor);
         }
+        float intensity = Mathf.Pow(Mathf.Cos(Mathf.Pow(Mathf.Sin((NetworkManager.Singleton.ServerTime.TimeAsFloat / WeatherController.Singleton.DayLength) + 1), 10)), 1419);
+        lightCover.falloffIntensity = intensity;
     }
 
     private void FixedUpdate()
@@ -190,6 +195,9 @@ public class PlayerController : NetworkBehaviour
         if (IsOwner)
         {
             AudioManager.PlayVariedAudio(BulletTakeAudioSource, Weapon.weaponTakeClips);
+            Vector3 impulse = new Vector3(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f), 0).normalized * 0.1f;
+            Debug.Log(impulse);
+            takeDamageImpulseSource.GenerateImpulse(impulse);
         }
         if (Health <= 0)
         {

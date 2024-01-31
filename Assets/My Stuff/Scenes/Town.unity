@@ -33136,7 +33136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShadowMaterial: {fileID: 2100000, guid: e83e093e40ed8ac48b14311e2a6f20f2, type: 2}
   LightAngle: -0.5
-  DayLength: 20
+  DayLength: 100
 --- !u!4 &1205811685
 Transform:
   m_ObjectHideFlags: 0
