@@ -6,11 +6,14 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 public class PlayerController : NetworkBehaviour
 {
     public static PlayerController[] Players;
 
+    public Canvas Canvas;
+    public Image bloodyImage;
     public AudioListener AudioListener;
     public Weapon Weapon;
     public GameObject PlayerDeath;
@@ -50,13 +53,14 @@ public class PlayerController : NetworkBehaviour
 
     Light2D lightCover;
 
+    int healthID;
+
     public override void OnNetworkSpawn()
     {
         Players[OwnerClientId] = this;
         playerInput = GetComponent<PlayerInput>();
         thisCollider = GetComponent<Collider2D>();
         takeDamageImpulseSource = GetComponent<CinemachineImpulseSource>();
-
         lightCover = GetComponent<Light2D>();
 
         OnWeaponChange += OnThisWeaponChange;
@@ -70,10 +74,18 @@ public class PlayerController : NetworkBehaviour
             Destroy(AudioListener);
             Destroy(lightCover);
             Destroy(takeDamageImpulseSource);
+            Destroy(bloodyImage);
             return;
         }
 
+        healthID = Shader.PropertyToID("_Health");
+
         main = Camera.main;
+        Canvas.worldCamera = main;
+        Canvas.sortingLayerName = "Bloody UI";
+
+        bloodyImage.material.SetFloat(healthID, Health / defaultHealth);
+
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -196,8 +208,8 @@ public class PlayerController : NetworkBehaviour
         {
             AudioManager.PlayVariedAudio(BulletTakeAudioSource, Weapon.weaponTakeClips);
             Vector3 impulse = new Vector3(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f), 0).normalized * 0.1f;
-            Debug.Log(impulse);
             takeDamageImpulseSource.GenerateImpulse(impulse);
+            bloodyImage.material.SetFloat(healthID, Health / defaultHealth);
         }
         if (Health <= 0)
         {
@@ -228,5 +240,6 @@ public class PlayerController : NetworkBehaviour
     private void OnThisRespawn()
     {
         Health = defaultHealth;
+        bloodyImage.material.SetFloat(healthID, Health / defaultHealth);
     }
 }

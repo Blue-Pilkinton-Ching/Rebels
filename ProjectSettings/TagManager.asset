@@ -69,9 +69,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Health Bar
+    uniqueID: 460478407
+    locked: 0
   - name: Bullets
     uniqueID: 438458653
     locked: 0
   - name: Trees
     uniqueID: 3615577405
+    locked: 0
+  - name: Bloody UI
+    uniqueID: 1320376981
     locked: 0

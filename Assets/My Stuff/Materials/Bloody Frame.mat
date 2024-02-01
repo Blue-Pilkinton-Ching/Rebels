@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shadow Material
-  m_Shader: {fileID: -6465566751694194690, guid: f246dd425143b914ca56ad05e796a17b, type: 3}
+  m_Name: Bloody Frame
+  m_Shader: {fileID: -6465566751694194690, guid: d6a21c1896a29284a9afba19c63223eb, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -20,12 +20,8 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 2800000, guid: a8194570a4f19a14e89ae3aa36f7fae9, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Shadow_Texture:
-        m_Texture: {fileID: 2800000, guid: 2419c667444e21447b102e52ecd34d55, type: 3}
+    - _Bloody_Texture:
+        m_Texture: {fileID: 2800000, guid: 1f02fd09ab99fc543aee1cf37385e06b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -42,14 +38,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Bounds_Scale: 2
-    - _Initial_Offset: -0.1
-    - _Offset_Multiplier: 0.2
-    - _QueueControl: 0
-    - _QueueOffset: 0
-    - _Rotation_Offset: 0.1
-    - _Shadow_Offset: 0.25
-    - _Sun_Angle: -0.5
-    - _Time_Of_Day: 0.62994653
-    m_Colors: []
+    - _Health: -0.05
+    - _Posterise: 12
+    m_Colors:
+    - _Pixels: {r: 160, g: 90, b: 0, a: 0}
   m_BuildTextureStacks: []
