@@ -31,9 +31,7 @@ public class PlayerController : NetworkBehaviour
 
     [SerializeField]
     private float camOrthogrphicChangeSpeed = 1;
-
     public bool IsAlive { get; private set; } = true;
-
     public float AngleToMouse { get; private set; }
     public float Health { get; private set; }
     public Action OnWeaponChange;
