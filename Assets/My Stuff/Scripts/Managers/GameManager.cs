@@ -44,7 +44,6 @@ public class GameManager : MonoBehaviour
             ClientConnected(NetworkManager.Singleton.LocalClientId);
         }
 
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void PlayRandomSoundTrack()

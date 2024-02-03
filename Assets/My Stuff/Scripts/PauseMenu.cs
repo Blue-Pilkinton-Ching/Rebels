@@ -19,19 +19,20 @@ public class PauseMenu : MonoBehaviour
     private float musicVolume;
 
 
-    private void Awake()
+    private void Start()
     {
         sfxVolume = PlayerPrefs.GetFloat("sfx", 0);
         musicVolume = PlayerPrefs.GetFloat("music", 0);
 
         sfxToggle.isOn = sfxVolume == 0;
         musicToggle.isOn = musicVolume == 0;
+
+        gameObject.SetActive(false);
     }
 
     public void ChangePause()
     {
         IsPaused = !IsPaused;
-        Cursor.lockState = IsPaused ? CursorLockMode.None : CursorLockMode.Locked;
         gameObject.SetActive(IsPaused);
     }
 
