@@ -122,7 +122,7 @@ public class PlayerBody : NetworkBehaviour, IDamageable
 
     private void FireShot()
     {
-        if (shooting == false && player.IsAlive)
+        if (shooting == false && player.IsAlive && !GameManager.Singleton.PauseMenu.gameObject.activeInHierarchy)
         {
             aimAngle =
                 -1

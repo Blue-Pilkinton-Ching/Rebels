@@ -125,7 +125,7 @@ public class PlayerController : NetworkBehaviour
             )
         );
 
-        if (IsAlive)
+        if (IsAlive && !pauseMenu.gameObject.activeInHierarchy)
         {
             GameManager.Singleton.Focus.position =
                 mousePos - ((mousePos - transform.position) * Weapon.ViewFactor);
@@ -141,7 +141,7 @@ public class PlayerController : NetworkBehaviour
             return;
         }
 
-        if (Health > 0 && IsAlive)
+        if (Health > 0 && IsAlive && !pauseMenu.gameObject.activeInHierarchy)
         {
             rb.AddForce(
                 new Vector2(inputMovement.x, inputMovement.y)
