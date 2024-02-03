@@ -5,6 +5,7 @@ using Unity.Netcode.Transports.UTP;
 using Unity.Services.Relay;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -42,6 +43,8 @@ public class GameManager : MonoBehaviour
         {
             ClientConnected(NetworkManager.Singleton.LocalClientId);
         }
+
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void PlayRandomSoundTrack()
