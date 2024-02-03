@@ -20,7 +20,6 @@ public class NetworkHelper : MonoBehaviour
     {
         while (true)
         {
-            Debug.Log("Sending Lobby Heartbeat");
             Lobbies.Instance.SendHeartbeatPingAsync(lobbyID);
             yield return new WaitForSeconds(15);
         }

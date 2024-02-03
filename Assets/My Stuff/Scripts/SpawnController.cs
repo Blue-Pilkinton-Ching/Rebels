@@ -7,7 +7,6 @@ public class SpawnController : MonoBehaviour
 {
     public static SpawnController Singleton;
 
-    public float rangeForPlayerToSpawn = 7;
     private List<Transform> spawnLocations = new List<Transform>();
     private void Awake()
     {

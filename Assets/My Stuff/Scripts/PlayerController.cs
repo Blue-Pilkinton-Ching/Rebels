@@ -40,9 +40,10 @@ public class PlayerController : NetworkBehaviour
 
     private Vector2 inputMovement;
     private Camera main;
-
+    private PauseMenu pauseMenu;
     public Color PlayerDamageColor;
     public float PlayerDamageFlashTime;
+
 
     Vector3 mousePos;
     Vector2 dir;
@@ -85,6 +86,8 @@ public class PlayerController : NetworkBehaviour
         bloodyImage.material.SetFloat(healthID, Health / defaultHealth);
 
         rb = GetComponent<Rigidbody2D>();
+
+        pauseMenu = GameManager.Singleton.PauseMenu;
     }
 
     private void Start()
@@ -152,6 +155,14 @@ public class PlayerController : NetworkBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         inputMovement = context.ReadValue<Vector2>();
+    }
+
+    public void OnPauseButton(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            pauseMenu.ChangePause();
+        }
     }
 
     private void Die()

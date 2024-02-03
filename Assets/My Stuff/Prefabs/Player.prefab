@@ -535,7 +535,6 @@ GameObject:
   - component: {fileID: 5972626808156376768}
   - component: {fileID: 6497566459778866185}
   - component: {fileID: 8152874724062576723}
-  - component: {fileID: 6517875106247272939}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -674,8 +673,8 @@ MonoBehaviour:
     m_ActionName: UI/TrackedDeviceOrientation
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6517875106247272939}
-        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+      - m_Target: {fileID: 4325786074038893646}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
         m_MethodName: OnPauseButton
         m_Mode: 0
         m_Arguments:
@@ -705,7 +704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 339950813
+  GlobalObjectIdHash: 2600097065
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -906,18 +905,6 @@ MonoBehaviour:
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
   m_DefaultVelocity: {x: 0, y: -1, z: 0}
---- !u!114 &6517875106247272939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4325786074038893643}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ce1ce7d6a317e246a05ce68e987e69c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4325786074078722569
 GameObject:
   m_ObjectHideFlags: 0

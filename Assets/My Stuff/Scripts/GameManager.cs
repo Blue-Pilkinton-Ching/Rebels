@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     public GameObject playerPrefab;
 
     public Transform Focus;
+
+    public PauseMenu PauseMenu;
     public CinemachineVirtualCamera Camera;
     public Canvas PlayerDeadCanvas;
 

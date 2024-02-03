@@ -64,8 +64,7 @@ MonoBehaviour:
   description: Contains an orthographic camera and a Global Light 2D. Works with
     the 2D Renderer in Universal RP.
   preview: {fileID: -3604256930052969394}
-  dependencies:
-  - dependency: {fileID: 2800000, guid: b3ab972b21db85d48ade9657efdd4771, type: 3}
-    instantiationMode: 1
-  templatePipeline: {fileID: 0}
+  dependencies: []
+  templatePipeline: {fileID: 11500000, guid: 70137321aaa2ad94d8653efa51847ef3, type: 3}
+  badge: {fileID: 0}
   addToDefaults: 1
