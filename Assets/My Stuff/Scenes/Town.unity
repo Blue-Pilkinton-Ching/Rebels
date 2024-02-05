@@ -24975,11 +24975,11 @@ RectTransform:
   m_Father: {fileID: 92508575}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -480}
-  m_SizeDelta: {x: 1920, y: 120}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1920, y: 160}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &677949300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24994,8 +24994,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSlots: 3
   SlotPrefab: {fileID: 1301537095214147631, guid: a1a471f5997f4fd4889a2afc05f8727c, type: 3}
-  SlotOffset: {x: 45, y: 45}
-  SlotGap: 15
+  SlotOffset: {x: -60, y: 0}
+  SlotGap: -120
 --- !u!4 &678620996 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1800383663770131667, guid: 47a68db4c16c97645be7ad8ee1e93b6d, type: 3}

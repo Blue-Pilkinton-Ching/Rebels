@@ -17,7 +17,10 @@ public class Inventory : MonoBehaviour
 
         for (var i = 0; i < maxSlots; i++)
         {
-            GameObject slotObject = Instantiate(SlotPrefab, new Vector3(SlotOffset.x + (SlotGap * i), SlotOffset.y), Quaternion.identity, transform);
+            GameObject slotObject = Instantiate(SlotPrefab, transform);
+
+            slotObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(SlotOffset.x + (SlotGap * i), SlotOffset.y);
+
             Slots[i] = slotObject.GetComponent<InventorySlot>();
         }
         Singleton = this;
