@@ -18,6 +18,7 @@ MonoBehaviour:
   MoveForce: 1
   BulletSpeed: 50
   bullet: {fileID: 5528446558893595460, guid: 625e453584ed81a4898f0a1428f2cd2d, type: 3}
+  animationName: Pistel
   bulletFireLocation: {x: -0.01, y: -0.22, z: 0}
   weaponShootClips:
   - audioClip: {fileID: 8300000, guid: 62f505f668e4ff949b97fcc0d4c09c6c, type: 3}

@@ -4,25 +4,32 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    public int maxSlots = 3;
+    public int initialSlots = 2;
     public GameObject SlotPrefab;
     public Vector2 SlotOffset;
     public float SlotGap;
     public Inventory Singleton { get; private set; } = null;
-    public InventorySlot[] Slots { get; private set; }
-
+    public List<InventorySlot> Slots { get; private set; } = new();
     private void Awake()
     {
-        Slots = new InventorySlot[maxSlots];
+        Singleton = this;
+        AddCells(initialSlots);
+    }
 
-        for (var i = 0; i < maxSlots; i++)
+    public void AddSlots(int count)
+    {
+        AddCells(count);
+    }
+
+    private void AddCells(int count)
+    {
+        for (var i = 0; i < count; i++)
         {
             GameObject slotObject = Instantiate(SlotPrefab, transform);
 
-            slotObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(SlotOffset.x + (SlotGap * i), SlotOffset.y);
+            slotObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(SlotOffset.x + (SlotGap * Slots.Count), SlotOffset.y);
 
-            Slots[i] = slotObject.GetComponent<InventorySlot>();
+            Slots.Add(slotObject.GetComponent<InventorySlot>());
         }
-        Singleton = this;
     }
 }

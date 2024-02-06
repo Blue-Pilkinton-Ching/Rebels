@@ -12,6 +12,7 @@ public class Weapon : ScriptableObject
     public float MoveForce = 1;
     public float BulletSpeed = 35;
     public GameObject bullet;
+    public string animationName;
     public Vector3 bulletFireLocation;
     public AudioClipVarience[] weaponShootClips;
     public AudioClipVarience[] weaponHitClips;
@@ -19,7 +20,6 @@ public class Weapon : ScriptableObject
     [Range(0, 180)]
     public float weaponInacurracy = 5f;
     public float damageAmount = 3f;
-
     public AnimationCurve bulletChanceCollide;
 }
 

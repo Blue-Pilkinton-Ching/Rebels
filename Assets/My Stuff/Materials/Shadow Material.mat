@@ -50,6 +50,6 @@ Material:
     - _Rotation_Offset: 0.1
     - _Shadow_Offset: 0.25
     - _Sun_Angle: -0.5
-    - _Time_Of_Day: 0
+    - _Time_Of_Day: 0.1849346
     m_Colors: []
   m_BuildTextureStacks: []

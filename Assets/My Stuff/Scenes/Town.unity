@@ -23254,6 +23254,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1800383663770131667, guid: 57d0ca171e5a15841970a45bab308af3, type: 3}
   m_PrefabInstance: {fileID: 132226931}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &584951011
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 584951012}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &584951012
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584951011}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 22
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &585169991
 GameObject:
   m_ObjectHideFlags: 0
@@ -24992,7 +25023,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7ad09570fa573349af7842e94ee0561, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSlots: 3
+  initialSlots: 2
   SlotPrefab: {fileID: 1301537095214147631, guid: a1a471f5997f4fd4889a2afc05f8727c, type: 3}
   SlotOffset: {x: -60, y: 0}
   SlotGap: -120

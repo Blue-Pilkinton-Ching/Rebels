@@ -19,6 +19,7 @@ public class PlayerBody : NetworkBehaviour, IDamageable
     private SpriteRenderer sr;
     private PlayerController player;
     private CinemachineImpulseSource shootImpulse;
+    public Animator WeaponAnimator;
 
     [Tooltip(
         "This array should contain the colliders of the player that shot, and any vehicals they are in"
@@ -41,6 +42,8 @@ public class PlayerBody : NetworkBehaviour, IDamageable
 
     int fire = Animator.StringToHash("BodyFire");
     int pistel = Animator.StringToHash("BodyPistel");
+
+    int weaponAnimationStateHash;
 
     public override void OnNetworkSpawn()
     {
@@ -70,6 +73,7 @@ public class PlayerBody : NetworkBehaviour, IDamageable
 
     private void OnWeaponChange()
     {
+        weaponAnimationStateHash = Animator.StringToHash(weapon.animationName);
         if (IsOwner)
         {
             anm.speed = 1 * weapon.MoveForce;
@@ -168,6 +172,8 @@ public class PlayerBody : NetworkBehaviour, IDamageable
             position,
             Quaternion.AngleAxis(-1 * (angle * Mathf.Rad2Deg), Vector3.forward)
         );
+
+        WeaponAnimator.Play(weaponAnimationStateHash, 0, 0);
 
         for (int i = 0; i < bulletRaycast.Length; i++)
         {
