@@ -6,7 +6,6 @@ using UnityEngine;
 public class SpawnController : MonoBehaviour
 {
     public static SpawnController Singleton;
-
     private List<Transform> spawnLocations = new List<Transform>();
     private void Awake()
     {

@@ -34,6 +34,7 @@ public class PlayerLegs : NetworkBehaviour, IDamageable
         player = PlayerController.Players[OwnerClientId];
         player.OnTakeDamage += OnTakeDamage;
         player.OnRespawn += OnRespawn;
+        player.OnDie += OnDie;
 
         if (!IsOwner)
         {
@@ -95,17 +96,15 @@ public class PlayerLegs : NetworkBehaviour, IDamageable
         sr.color = new Color(1, 1, 1, 1);
     }
 
-    void OnTakeDamage(float damage, bool dead)
+    void OnTakeDamage(float damage)
     {
-        if (dead)
-        {
-            sr.color = new Color(1, 1, 1, 0);
-        }
-        else
-        {
-            sr.DOColor(player.PlayerDamageColor, player.PlayerDamageFlashTime * 0.25f).SetEase(Ease.OutSine).OnComplete(() =>
-                sr.DOColor(Color.white, player.PlayerDamageFlashTime * 0.25f).SetEase(Ease.OutSine).SetDelay(player.PlayerDamageFlashTime * 0.5f)
-                    );
-        }
+        // sr.DOColor(player.PlayerDamageColor, player.PlayerDamageFlashTime * 0.25f).SetEase(Ease.OutSine).OnComplete(() =>
+        //     sr.DOColor(Color.white, player.PlayerDamageFlashTime * 0.25f).SetEase(Ease.OutSine).SetDelay(player.PlayerDamageFlashTime * 0.5f)
+        //         );
+    }
+
+    void OnDie()
+    {
+        sr.color = new Color(1, 1, 1, 0);
     }
 }

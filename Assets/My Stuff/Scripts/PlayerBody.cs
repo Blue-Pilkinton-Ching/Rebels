@@ -59,6 +59,7 @@ public class PlayerBody : NetworkBehaviour, IDamageable
         player.OnTakeDamage += OnTakeDamage;
         player.OnWeaponChange += OnWeaponChange;
         player.OnRespawn += OnRespawn;
+        player.OnDie += OnDie;
 
         weapon = PlayerController.Players[OwnerClientId].Weapon;
 
@@ -257,7 +258,7 @@ public class PlayerBody : NetworkBehaviour, IDamageable
         Vector3 position,
         float aimAngle,
         int seed,
-        ClientRpcParams clientRpcParams
+        ClientRpcParams _
     )
     {
         ShootVisuals(position, aimAngle, seed);
@@ -275,21 +276,21 @@ public class PlayerBody : NetworkBehaviour, IDamageable
         sr.color = new Color(1, 1, 1, 1);
     }
 
-    void OnTakeDamage(float damage, bool dead)
+    void OnTakeDamage(float damage)
     {
-        if (dead)
-        {
-            sr.color = new Color(0, 0, 0, 0);
-        }
-        else
-        {
-            sr.DOColor(player.PlayerDamageColor, player.PlayerDamageFlashTime / 2)
-                .SetEase(Ease.OutSine)
-                .OnComplete(
-                    () =>
-                        sr.DOColor(Color.white, player.PlayerDamageFlashTime / 2)
-                            .SetEase(Ease.OutSine)
-                );
-        }
+        // sr.DOColor(player.PlayerDamageColor, player.PlayerDamageFlashTime / 2)
+        //                 .SetEase(Ease.OutSine)
+        //                 .OnComplete(
+        //                     () =>
+        //                         sr.DOColor(Color.white, player.PlayerDamageFlashTime / 2)
+        //                             .SetEase(Ease.OutSine)
+        //                 );
+
+    }
+
+    void OnDie()
+    {
+        sr.color = new Color(0, 0, 0, 0);
+
     }
 }

@@ -33,9 +33,10 @@ public class PlayerController : NetworkBehaviour
     private float camOrthogrphicChangeSpeed = 1;
     public bool IsAlive { get; private set; } = true;
     public float AngleToMouse { get; private set; }
-    public float Health { get; private set; }
+    public NetworkVariable<float> Health { get; private set; } = new NetworkVariable<float>(value: 0, NetworkVariableReadPermission.Everyone, writePerm: NetworkVariableWritePermission.Owner);
     public Action OnWeaponChange;
-    public Action<float, bool> OnTakeDamage;
+    public Action<float> OnTakeDamage;
+    public Action OnDie;
     public Action OnRespawn;
 
     private Vector2 inputMovement;
@@ -65,7 +66,7 @@ public class PlayerController : NetworkBehaviour
         OnWeaponChange += OnThisWeaponChange;
         OnRespawn += OnThisRespawn;
 
-        Health = defaultHealth;
+        Health.OnValueChanged += OnHealthChange;
 
         if (!IsOwner)
         {
@@ -77,13 +78,15 @@ public class PlayerController : NetworkBehaviour
             return;
         }
 
+        Health.Value = defaultHealth;
+
         healthID = Shader.PropertyToID("_Health");
 
         main = Camera.main;
         Canvas.worldCamera = main;
         Canvas.sortingLayerName = "Bloody UI";
 
-        bloodyImage.material.SetFloat(healthID, Health / defaultHealth);
+        bloodyImage.material.SetFloat(healthID, Health.Value / defaultHealth);
 
         rb = GetComponent<Rigidbody2D>();
 
@@ -141,7 +144,7 @@ public class PlayerController : NetworkBehaviour
             return;
         }
 
-        if (Health > 0 && IsAlive && !pauseMenu.gameObject.activeInHierarchy)
+        if (Health.Value > 0 && IsAlive && !pauseMenu.gameObject.activeInHierarchy)
         {
             rb.AddForce(
                 new Vector2(inputMovement.x, inputMovement.y)
@@ -203,29 +206,44 @@ public class PlayerController : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void TakeDamageClientRPC(float damage, ClientRpcParams clientRpcParams)
+    private void TakeDamageClientRPC(float damage, ClientRpcParams _)
     {
-        TakeDamageResponse(damage);
+        if (IsOwner)
+        {
+            Health.Value -= damage;
+        }
     }
 
     private void TakeDamageResponse(float damage)
     {
-        Health -= damage;
-        OnTakeDamage.Invoke(damage, Health <= 0);
-
         if (IsOwner)
         {
             AudioManager.PlayVariedAudio(BulletTakeAudioSource, Weapon.weaponTakeClips);
             Vector3 impulse = new Vector3(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f), 0).normalized * 0.1f;
             takeDamageImpulseSource.GenerateImpulse(impulse);
-            bloodyImage.material.SetFloat(healthID, Health / defaultHealth);
+            bloodyImage.material.SetFloat(healthID, Health.Value / defaultHealth);
+
         }
-        if (Health <= 0)
-        {
-            Die();
-        }
+        OnTakeDamage.Invoke(damage);
     }
 
+    private void OnHealthChange(float previous, float current)
+    {
+        if (current < previous)
+        {
+            TakeDamageResponse(previous - current);
+        }
+        else
+        {
+
+        }
+
+        if (current <= 0)
+        {
+            Die();
+            OnDie.Invoke();
+        }
+    }
     public void Respawn()
     {
         RespawnServerRPC();
@@ -248,7 +266,10 @@ public class PlayerController : NetworkBehaviour
 
     private void OnThisRespawn()
     {
-        Health = defaultHealth;
-        bloodyImage.material.SetFloat(healthID, Health / defaultHealth);
+        if (IsOwner)
+        {
+            Health.Value = defaultHealth;
+            bloodyImage.material.SetFloat(healthID, Health.Value / defaultHealth);
+        }
     }
 }
