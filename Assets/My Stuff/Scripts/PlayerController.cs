@@ -65,6 +65,7 @@ public class PlayerController : NetworkBehaviour
 
         OnWeaponChange += OnThisWeaponChange;
         OnRespawn += OnThisRespawn;
+        OnDie += Die;
 
         Health.OnValueChanged += OnHealthChange;
 
@@ -199,6 +200,7 @@ public class PlayerController : NetworkBehaviour
                 ids.Add(connectedClients[i]);
             }
         }
+
         TakeDamageClientRPC(
             damage,
             new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = ids } }
@@ -208,6 +210,7 @@ public class PlayerController : NetworkBehaviour
     [ClientRpc]
     private void TakeDamageClientRPC(float damage, ClientRpcParams _)
     {
+        TakeDamageResponse(damage);
         if (IsOwner)
         {
             Health.Value -= damage;
@@ -222,25 +225,16 @@ public class PlayerController : NetworkBehaviour
             Vector3 impulse = new Vector3(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f), 0).normalized * 0.1f;
             takeDamageImpulseSource.GenerateImpulse(impulse);
             bloodyImage.material.SetFloat(healthID, Health.Value / defaultHealth);
-
         }
+
         OnTakeDamage.Invoke(damage);
     }
 
     private void OnHealthChange(float previous, float current)
     {
-        if (current < previous)
-        {
-            TakeDamageResponse(previous - current);
-        }
-        else
-        {
-
-        }
-
         if (current <= 0)
         {
-            Die();
+            DOTween.Kill("damage" + OwnerClientId);
             OnDie.Invoke();
         }
     }

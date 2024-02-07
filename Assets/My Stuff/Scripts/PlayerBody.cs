@@ -26,10 +26,11 @@ public class PlayerBody : NetworkBehaviour, IDamageable
     )]
     private Collider2D[] IgnoreColliders;
     private Weapon weapon;
-
     private bool shooting = false;
     private bool inputFire;
     private int oldBodyState;
+
+    private object damageTween;
 
     int bodyState;
     float aimAngle;
@@ -278,19 +279,20 @@ public class PlayerBody : NetworkBehaviour, IDamageable
 
     void OnTakeDamage(float damage)
     {
-        // sr.DOColor(player.PlayerDamageColor, player.PlayerDamageFlashTime / 2)
-        //                 .SetEase(Ease.OutSine)
-        //                 .OnComplete(
-        //                     () =>
-        //                         sr.DOColor(Color.white, player.PlayerDamageFlashTime / 2)
-        //                             .SetEase(Ease.OutSine)
-        //                 );
-
+        if (player.Health.Value - damage > 0)
+        {
+            damageTween = sr.DOColor(player.PlayerDamageColor, player.PlayerDamageFlashTime / 2)
+                        .SetEase(Ease.OutSine).SetId("damage" + OwnerClientId)
+                        .OnComplete(
+                            () =>
+                                sr.DOColor(Color.white, player.PlayerDamageFlashTime / 2)
+                                    .SetEase(Ease.OutSine)
+                        ).SetId("damage" + OwnerClientId);
+        }
     }
 
     void OnDie()
     {
         sr.color = new Color(0, 0, 0, 0);
-
     }
 }

@@ -16,6 +16,7 @@ public class PlayerLegs : NetworkBehaviour, IDamageable
 
     public float rotateSpeed;
 
+
     int pantsState;
     int oldPantsState;
 
@@ -98,13 +99,16 @@ public class PlayerLegs : NetworkBehaviour, IDamageable
 
     void OnTakeDamage(float damage)
     {
-        // sr.DOColor(player.PlayerDamageColor, player.PlayerDamageFlashTime * 0.25f).SetEase(Ease.OutSine).OnComplete(() =>
-        //     sr.DOColor(Color.white, player.PlayerDamageFlashTime * 0.25f).SetEase(Ease.OutSine).SetDelay(player.PlayerDamageFlashTime * 0.5f)
-        //         );
+        if (player.Health.Value - damage > 0)
+        {
+            sr.DOColor(player.PlayerDamageColor, player.PlayerDamageFlashTime * 0.25f).SetEase(Ease.OutSine).SetId("damage" + OwnerClientId).OnComplete(() =>
+                sr.DOColor(Color.white, player.PlayerDamageFlashTime * 0.25f).SetEase(Ease.OutSine).SetDelay(player.PlayerDamageFlashTime * 0.5f)
+                    ).SetId("damage" + OwnerClientId);
+        }
     }
 
     void OnDie()
     {
-        sr.color = new Color(1, 1, 1, 0);
+        sr.color = new Color(0, 0, 0, 0);
     }
 }
